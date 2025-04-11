@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <rect width="100%" height="100%" fill="#f5f5f5"/>
+  
+  <!-- 지도 배경 -->
+  <rect x="50" y="50" width="500" height="300" fill="#ffffff" stroke="#cccccc" stroke-width="2"/>
+  
+  <!-- 도로 -->
+  <rect x="100" y="50" width="20" height="300" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="50" y="150" width="500" height="30" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="300" y="50" width="30" height="300" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  
+  <!-- 건물 표시 -->
+  <rect x="150" y="100" width="100" height="40" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="150" y="200" width="120" height="70" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="350" y="200" width="80" height="100" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="350" y="80" width="150" height="60" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
+  
+  <!-- 세원프린팅 위치 -->
+  <rect x="240" y="180" width="40" height="30" fill="#f27935"/>
+  <text x="260" y="200" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">세원프린팅</text>
+  
+  <!-- 위치 마커 -->
+  <circle cx="260" cy="195" r="15" fill="#1a3a5f" opacity="0.3"/>
+  <circle cx="260" cy="195" r="5" fill="#1a3a5f"/>
+  
+  <!-- 주요 위치 표시 -->
+  <rect x="130" y="80" width="70" height="25" fill="#1a3a5f" opacity="0.7"/>
+  <text x="165" y="97" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">영등포역</text>
+  
+  <rect x="400" y="70" width="90" height="25" fill="#1a3a5f" opacity="0.7"/>
+  <text x="445" y="87" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">타임스퀘어</text>
+  
+  <rect x="400" y="230" width="70" height="25" fill="#1a3a5f" opacity="0.7"/>
+  <text x="435" y="247" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">소방서</text>
+  
+  <!-- 나침반 -->
+  <circle cx="520" cy="80" r="20" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="520" y="84" font-family="Arial" font-size="12" font-weight="bold" fill="#1a3a5f" text-anchor="middle">N</text>
+  
+  <!-- 축척 -->
+  <line x1="450" y1="350" x2="550" y2="350" stroke="#333333" stroke-width="2"/>
+  <text x="500" y="370" font-family="Arial" font-size="10" fill="#333333" text-anchor="middle">100m</text>
+</svg>
