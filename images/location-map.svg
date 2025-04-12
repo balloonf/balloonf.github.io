@@ -1,44 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
-  <rect width="100%" height="100%" fill="#f5f5f5"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="#f8f9fa"/>
   
-  <!-- 지도 배경 -->
-  <rect x="50" y="50" width="500" height="300" fill="#ffffff" stroke="#cccccc" stroke-width="2"/>
+  <!-- 그리드 패턴 - 모던한 느낌을 위한 배경 요소 -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ecedef" stroke-width="1"/>
+  </pattern>
+  <rect width="800" height="600" fill="url(#grid)"/>
   
-  <!-- 도로 -->
-  <rect x="100" y="50" width="20" height="300" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
-  <rect x="50" y="150" width="500" height="30" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
-  <rect x="300" y="50" width="30" height="300" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  <!-- 주요 도로 -->
+  <path d="M 50,200 L 750,200" stroke="#e0e0e0" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M 50,340 L 750,340" stroke="#e0e0e0" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M 200,100 L 200,500" stroke="#e0e0e0" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M 400,100 L 400,500" stroke="#e0e0e0" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M 600,100 L 600,500" stroke="#e0e0e0" stroke-width="28" fill="none" stroke-linecap="round"/>
   
-  <!-- 건물 표시 -->
-  <rect x="150" y="100" width="100" height="40" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
-  <rect x="150" y="200" width="120" height="70" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
-  <rect x="350" y="200" width="80" height="100" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
-  <rect x="350" y="80" width="150" height="60" fill="#e0e0e0" stroke="#cccccc" stroke-width="1"/>
+  <!-- 도로명 -->
+  <text x="400" y="185" font-family="'Playfair Display', serif" font-size="14" fill="#555" text-anchor="middle">영등포로</text>
+  <text x="400" y="325" font-family="'Playfair Display', serif" font-size="14" fill="#555" text-anchor="middle">물레로</text>
+  <text x="185" y="280" font-family="'Playfair Display', serif" font-size="14" fill="#555" transform="rotate(-90, 185, 280)">양산로</text>
+  <text x="385" y="280" font-family="'Playfair Display', serif" font-size="14" fill="#555" transform="rotate(-90, 385, 280)">영중로</text>
+  <text x="585" y="280" font-family="'Playfair Display', serif" font-size="14" fill="#555" transform="rotate(-90, 585, 280)">경인로</text>
   
-  <!-- 세원프린팅 위치 -->
-  <rect x="240" y="180" width="40" height="30" fill="#f27935"/>
-  <text x="260" y="200" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">세원프린팅</text>
+  <!-- 주요 지점 마커 - 현대적인 디자인 -->
+  <!-- 중앙 빨간 마커 (현재 위치) -->
+  <circle cx="345" cy="270" r="8" fill="#ffffff" stroke="#ff4757" stroke-width="10" opacity="0.2"/>
+  <circle cx="345" cy="270" r="12" fill="#ffffff" stroke="#ff4757" stroke-width="3"/>
+  <circle cx="345" cy="270" r="5" fill="#ff4757"/>
   
-  <!-- 위치 마커 -->
-  <circle cx="260" cy="195" r="15" fill="#1a3a5f" opacity="0.3"/>
-  <circle cx="260" cy="195" r="5" fill="#1a3a5f"/>
+  <!-- 영등포 전통시장 -->
+  <circle cx="500" cy="150" r="12" fill="#ffffff" stroke="#2e86de" stroke-width="3"/>
+  <circle cx="500" cy="150" r="5" fill="#2e86de"/>
   
-  <!-- 주요 위치 표시 -->
-  <rect x="130" y="80" width="70" height="25" fill="#1a3a5f" opacity="0.7"/>
-  <text x="165" y="97" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">영등포역</text>
+  <!-- 롯데백화점 영등포점 -->
+  <circle cx="660" cy="430" r="12" fill="#ffffff" stroke="#2e86de" stroke-width="3"/>
+  <circle cx="660" cy="430" r="5" fill="#2e86de"/>
   
-  <rect x="400" y="70" width="90" height="25" fill="#1a3a5f" opacity="0.7"/>
-  <text x="445" y="87" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">타임스퀘어</text>
+  <!-- 중앙어린이공원 -->
+  <circle cx="300" cy="120" r="12" fill="#ffffff" stroke="#26ae60" stroke-width="3"/>
+  <circle cx="300" cy="120" r="5" fill="#26ae60"/>
   
-  <rect x="400" y="230" width="70" height="25" fill="#1a3a5f" opacity="0.7"/>
-  <text x="435" y="247" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">소방서</text>
+  <!-- 영등포 공원 -->
+  <circle cx="670" cy="500" r="12" fill="#ffffff" stroke="#26ae60" stroke-width="3"/>
+  <circle cx="670" cy="500" r="5" fill="#26ae60"/>
   
-  <!-- 나침반 -->
-  <circle cx="520" cy="80" r="20" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
-  <text x="520" y="84" font-family="Arial" font-size="12" font-weight="bold" fill="#1a3a5f" text-anchor="middle">N</text>
+  <!-- 신세계백화점 타임스퀘어점 -->
+  <circle cx="460" cy="430" r="12" fill="#ffffff" stroke="#2e86de" stroke-width="3"/>
+  <circle cx="460" cy="430" r="5" fill="#2e86de"/>
   
-  <!-- 축척 -->
-  <line x1="450" y1="350" x2="550" y2="350" stroke="#333333" stroke-width="2"/>
-  <text x="500" y="370" font-family="Arial" font-size="10" fill="#333333" text-anchor="middle">100m</text>
+  <!-- 호텔 -->
+  <circle cx="245" cy="270" r="12" fill="#ffffff" stroke="#f368e0" stroke-width="3"/>
+  <circle cx="245" cy="270" r="5" fill="#f368e0"/>
+  
+  <!-- 호텔 SB -->
+  <circle cx="600" cy="360" r="12" fill="#ffffff" stroke="#f368e0" stroke-width="3"/>
+  <circle cx="600" cy="360" r="5" fill="#f368e0"/>
+  
+  <!-- 레스토랑 -->
+  <circle cx="250" cy="200" r="12" fill="#ffffff" stroke="#ff9f43" stroke-width="3"/>
+  <circle cx="250" cy="200" r="5" fill="#ff9f43"/>
+  
+  <!-- 장소명 라벨 - 고급스러운 폰트 -->
+  <text x="520" y="150" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">영등포 전통시장</text>
+  <text x="680" y="430" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">롯데백화점 영등포점</text>
+  <text x="320" y="120" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">중앙어린이공원</text>
+  <text x="690" y="500" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">영등포 공원</text>
+  <text x="480" y="430" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">신세계백화점 타임스퀘어점</text>
+  <text x="265" y="270" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">씨엘 관광호텔</text>
+  <text x="620" y="360" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">호텔 SB</text>
+  <text x="270" y="200" font-family="'Montserrat', sans-serif" font-size="12" font-weight="500" fill="#333" text-anchor="start">코리안 레스토랑</text>
+  
+  <!-- 현재 위치 표시 -->
+  <text x="345" y="300" font-family="'Playfair Display', serif" font-size="14" font-weight="600" fill="#ff4757" text-anchor="middle">세원 프린팅</text>
+  
+  <!-- 범례 -->
+  <rect x="50" y="520" width="700" height="60" rx="8" ry="8" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <circle cx="80" cy="540" r="6" fill="#ff4757"/>
+  <text x="100" y="544" font-family="'Montserrat', sans-serif" font-size="12" fill="#333">세원 프린팅</text>
+  
+  <circle cx="180" cy="540" r="6" fill="#2e86de"/>
+  <text x="200" y="544" font-family="'Montserrat', sans-serif" font-size="12" fill="#333">쇼핑</text>
+  
+  <circle cx="250" cy="540" r="6" fill="#26ae60"/>
+  <text x="270" y="544" font-family="'Montserrat', sans-serif" font-size="12" fill="#333">공원</text>
+  
+  <circle cx="320" cy="540" r="6" fill="#f368e0"/>
+  <text x="340" y="544" font-family="'Montserrat', sans-serif" font-size="12" fill="#333">호텔</text>
+  
+  <circle cx="400" cy="540" r="6" fill="#ff9f43"/>
+  <text x="420" y="544" font-family="'Montserrat', sans-serif" font-size="12" fill="#333">식당</text>
+  
+  <!-- 방향 표시 - 모던한 나침반 -->
+  <circle cx="720" cy="80" r="30" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="720" y="75" font-family="'Playfair Display', serif" font-size="12" fill="#333" text-anchor="middle">N</text>
+  <text x="720" y="95" font-family="'Montserrat', sans-serif" font-size="7" fill="#777" text-anchor="middle">NORTH</text>
+  <path d="M 720,80 L 720,60" stroke="#ff4757" stroke-width="2" fill="none"/>
+  
+  <!-- 타이틀 -->
+  <text x="400" y="50" font-family="'Playfair Display', serif" font-size="24" font-weight="600" fill="#333" text-anchor="middle">세원 프린팅</text>
+  <line x1="300" y1="65" x2="500" y2="65" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- 주소 정보 추가 -->
+  <text x="400" y="580" font-family="'Montserrat', sans-serif" font-size="11" font-weight="400" fill="#555" text-anchor="middle">서울특별시 영등포구 영신로 30길 15 (영등포동4가 113-4) 1층</text>
 </svg>
