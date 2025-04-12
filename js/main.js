@@ -13,6 +13,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // 약도 확대 기능
+  const mapZoomContainer = document.getElementById('mapZoomContainer');
+  const mapModal = document.getElementById('mapModal');
+  const mapCloseBtn = document.getElementById('mapCloseBtn');
+  
+  if (mapZoomContainer && mapModal) {
+    // 약도 클릭 시 모달 열기
+    mapZoomContainer.addEventListener('click', function() {
+      mapModal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    });
+    
+    // 닫기 버튼 클릭 시 모달 닫기
+    if (mapCloseBtn) {
+      mapCloseBtn.addEventListener('click', function() {
+        mapModal.classList.remove('active');
+        document.body.style.overflow = ''; // 배경 스크롤 복원
+      });
+    }
+    
+    // 모달 배경 클릭 시 닫기
+    mapModal.addEventListener('click', function(event) {
+      if (event.target === mapModal) {
+        mapModal.classList.remove('active');
+        document.body.style.overflow = ''; // 배경 스크롤 복원
+      }
+    });
+    
+    // ESC 키 누를 때 모달 닫기
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && mapModal.classList.contains('active')) {
+        mapModal.classList.remove('active');
+        document.body.style.overflow = ''; // 배경 스크롤 복원
+      }
+    });
+  }
+  
   // 스크롤 이벤트 처리
   window.addEventListener('scroll', function() {
     const header = document.querySelector('.header');

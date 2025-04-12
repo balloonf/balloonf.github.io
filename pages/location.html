@@ -225,7 +225,17 @@
       <h2 class="section-title">약도</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: center;">
         <div style="flex: 1 1 400px; text-align: center;">
-          <img src="../images/location-map.svg" alt="세원프린팅 약도" style="max-width: 100%; border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
+          <a href="../images/location-map.svg" target="_blank" style="display: block; position: relative; border-radius: var(--border-radius); box-shadow: var(--box-shadow); overflow: hidden;">
+            <img src="../images/location-map.svg" alt="세원프린팅 약도" style="max-width: 100%; display: block; transition: transform 0.3s ease;">
+            <div style="position: absolute; bottom: 15px; right: 15px; background-color: rgba(255,255,255,0.8); padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 3H21V9" stroke="#1a3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 21H3V15" stroke="#1a3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3L14 10" stroke="#1a3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 21L10 14" stroke="#1a3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </a>
           <p style="margin-top: 1rem; font-size: var(--font-sm);">* 클릭하시면 확대해서 보실 수 있습니다.</p>
         </div>
         
@@ -269,17 +279,13 @@
       <div style="text-align: center; max-width: 600px; margin: 0 auto;">
         <p>찾아오시는 길에 어려움이 있으시거나, 추가 정보가 필요하시면 언제든지 연락해주세요. 친절하게 안내해드리겠습니다.</p>
         <div style="margin-top: 2rem;">
-          <a href="tel:02-6015-3100" class="btn" style="margin-right: 1rem; margin-bottom: 1rem;">
-            <svg style="width: 16px; height: 16px; margin-right: 0.5rem; fill: currentColor; vertical-align: middle;">
-              <use xlink:href="../images/icons.svg#icon-phone"></use>
-            </svg>
-            전화하기
+          <a href="tel:02-6015-3100" class="btn" style="margin-right: 1rem; margin-bottom: 1rem; display: inline-flex; align-items: center; justify-content: center;">
+            <img src="../images/phone-icon.svg" alt="전화 아이콘" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+            <span>전화하기</span>
           </a>
-          <a href="contact.html" class="btn">
-            <svg style="width: 16px; height: 16px; margin-right: 0.5rem; fill: currentColor; vertical-align: middle;">
-              <use xlink:href="../images/icons.svg#icon-email"></use>
-            </svg>
-            문의하기
+          <a href="contact.html" class="btn" style="display: inline-flex; align-items: center; justify-content: center;">
+            <img src="../images/email-icon.svg" alt="이메일 아이콘" style="width: 16px; height: 16px; margin-right: 0.5rem;">
+            <span>문의하기</span>
           </a>
         </div>
       </div>
