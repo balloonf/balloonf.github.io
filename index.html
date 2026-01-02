@@ -3,16 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Personal Static Asset Archive - HTML, Images, Videos">
-    <title>Personal Archive | Static Asset Library</title>
+    <meta name="description" content="개인 파일 아카이브 - HTML, 이미지, 동영상 호스팅">
+    <title>개인 아카이브 | 파일 라이브러리</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Header Section -->
     <header class="header">
         <div class="container">
-            <h1 class="header__title">📦 Personal Archive</h1>
-            <p class="header__subtitle">Static Asset Library for Web Projects, Images & Videos</p>
+            <div class="header__content">
+                <div class="header__text">
+                    <h1 class="header__title">
+                        <span class="header__icon">🗂️</span>
+                        개인 아카이브
+                    </h1>
+                    <p class="header__subtitle">웹 프로젝트, 이미지, 영상을 손쉽게 관리하고 공유하세요</p>
+                </div>
+                <div class="header__stats" id="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-files">0</span>
+                        <span class="stat-label">전체 파일</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -21,32 +34,52 @@
         <div class="container">
             <!-- Search Bar -->
             <div class="search-section">
-                <input
-                    type="text"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="🔍 Search files by name..."
-                    autocomplete="off"
-                >
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
+                        placeholder="파일 이름으로 검색..."
+                        autocomplete="off"
+                    >
+                    <kbd class="search-shortcut">ESC</kbd>
+                </div>
             </div>
 
             <!-- Category Tabs -->
             <div class="tabs">
-                <button class="tab active" data-category="all">All</button>
-                <button class="tab" data-category="html">Web Projects</button>
-                <button class="tab" data-category="img">Images</button>
-                <button class="tab" data-category="video">Videos</button>
+                <button class="tab active" data-category="all">
+                    <span class="tab-icon">📋</span>
+                    <span class="tab-text">전체</span>
+                </button>
+                <button class="tab" data-category="html">
+                    <span class="tab-icon">🌐</span>
+                    <span class="tab-text">웹 프로젝트</span>
+                </button>
+                <button class="tab" data-category="img">
+                    <span class="tab-icon">🖼️</span>
+                    <span class="tab-text">이미지</span>
+                </button>
+                <button class="tab" data-category="video">
+                    <span class="tab-icon">🎬</span>
+                    <span class="tab-text">동영상</span>
+                </button>
             </div>
 
             <!-- File List Container -->
             <div id="file-list" class="file-list">
-                <!-- Files will be dynamically loaded here by main.js -->
+                <!-- 파일이 동적으로 로드됩니다 -->
             </div>
 
             <!-- Empty State -->
             <div id="empty-state" class="empty-state" style="display: none;">
-                <p>😕 No files found</p>
-                <small>Try adjusting your search or filter</small>
+                <div class="empty-icon">🔍</div>
+                <p class="empty-title">파일을 찾을 수 없습니다</p>
+                <small class="empty-desc">검색어나 필터를 변경해보세요</small>
             </div>
         </div>
     </main>
@@ -54,7 +87,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Personal Archive. Hosted on GitHub Pages.</p>
+            <p>© 2026 개인 아카이브 · GitHub Pages로 호스팅</p>
         </div>
     </footer>
 

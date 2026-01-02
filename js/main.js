@@ -1,10 +1,11 @@
 /**
- * Personal Archive - Main Application Logic
+ * 개인 아카이브 - 메인 애플리케이션 로직
  *
  * 기능:
  * 1. 파일 목록 렌더링
  * 2. 카테고리 탭 필터링
- * 3. 검색 기능
+ * 3. 실시간 검색 기능
+ * 4. 통계 정보 표시
  */
 
 // ========================================
@@ -20,6 +21,7 @@ const fileListContainer = document.getElementById('file-list');
 const emptyStateElement = document.getElementById('empty-state');
 const searchInput = document.getElementById('search-input');
 const tabs = document.querySelectorAll('.tab');
+const totalFilesElement = document.getElementById('total-files');
 
 // ========================================
 // Render Functions
@@ -32,14 +34,14 @@ const tabs = document.querySelectorAll('.tab');
  */
 function createFileCard(file) {
     const icon = fileIcons[file.type] || fileIcons.default;
-    const typeLabel = fileTypeLabels[file.type] || 'File';
+    const typeLabel = fileTypeLabels[file.type] || '파일';
 
     return `
         <a href="${file.path}" class="file-card" data-type="${file.type}" target="_blank">
             <div class="file-card__icon">${icon}</div>
             <div class="file-card__content">
                 <div class="file-card__title">${file.name}</div>
-                <div class="file-card__meta">${file.description || 'No description'}</div>
+                <div class="file-card__meta">${file.description || '설명 없음'}</div>
                 <span class="file-card__badge">${typeLabel}</span>
             </div>
         </a>
@@ -66,8 +68,46 @@ function renderFiles(files) {
     // 페이드인 애니메이션 적용
     const cards = fileListContainer.querySelectorAll('.file-card');
     cards.forEach((card, index) => {
-        card.style.animation = `fadeIn 0.3s ease ${index * 0.05}s both`;
+        card.style.animation = `fadeInUp 0.4s ease ${index * 0.05}s both`;
     });
+}
+
+/**
+ * 통계 정보 업데이트
+ */
+function updateStats() {
+    const totalFiles = filesData.length;
+
+    // 숫자 애니메이션 효과
+    animateNumber(totalFilesElement, 0, totalFiles, 1000);
+}
+
+/**
+ * 숫자 카운트 업 애니메이션
+ * @param {HTMLElement} element - 대상 엘리먼트
+ * @param {number} start - 시작 숫자
+ * @param {number} end - 끝 숫자
+ * @param {number} duration - 애니메이션 시간 (ms)
+ */
+function animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // easeOutQuad 이징 함수
+        const easeProgress = 1 - (1 - progress) * (1 - progress);
+        const currentValue = Math.floor(start + (end - start) * easeProgress);
+
+        element.textContent = currentValue;
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
 }
 
 // ========================================
@@ -147,13 +187,29 @@ searchInput.addEventListener('input', (e) => {
 });
 
 /**
- * 키보드 단축키 (ESC로 검색 초기화)
+ * 검색창 포커스 이벤트 - 전체 선택
+ */
+searchInput.addEventListener('focus', (e) => {
+    if (e.target.value) {
+        e.target.select();
+    }
+});
+
+/**
+ * 키보드 단축키
  */
 document.addEventListener('keydown', (e) => {
+    // ESC: 검색 초기화
     if (e.key === 'Escape' && searchInput.value) {
         searchInput.value = '';
         setSearchQuery('');
         searchInput.blur();
+    }
+
+    // Ctrl/Cmd + K: 검색창 포커스
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
     }
 });
 
@@ -165,8 +221,11 @@ document.addEventListener('keydown', (e) => {
  * 앱 초기화
  */
 function initApp() {
-    console.log('🚀 Personal Archive initialized');
-    console.log(`📦 Loaded ${filesData.length} files`);
+    console.log('🚀 개인 아카이브 초기화 완료');
+    console.log(`📦 총 ${filesData.length}개의 파일 로드됨`);
+
+    // 통계 업데이트
+    updateStats();
 
     // 초기 렌더링 (모든 파일 표시)
     renderFiles(filesData);

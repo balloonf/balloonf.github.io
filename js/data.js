@@ -73,7 +73,7 @@ const fileIcons = {
  * 파일 타입별 라벨 매핑
  */
 const fileTypeLabels = {
-    html: "Web Project",
-    img: "Image",
-    video: "Video"
+    html: "웹 프로젝트",
+    img: "이미지",
+    video: "동영상"
 };
