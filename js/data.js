@@ -18,6 +18,12 @@
  * }
  */
 
+/**
+ * ⚠️  경로 기준: archive/index.html 위치 기준 상대경로
+ *     HTML 파일  →  ../html/파일명.html
+ *     이미지     →  ../img/파일명.jpg
+ *     동영상     →  ../video/파일명.mp4
+ */
 const filesData = [
     // ========================================
     // Web Projects (HTML Files)
@@ -25,7 +31,7 @@ const filesData = [
     {
         name: "Sample Project",
         type: "html",
-        path: "html/sample-project.html",
+        path: "../html/sample-project.html",
         description: "샘플 프로젝트 - 실제 프로젝트로 교체하여 사용하세요"
     }
 
@@ -33,7 +39,7 @@ const filesData = [
     // {
     //     name: "Portfolio Website",
     //     type: "html",
-    //     path: "html/portfolio.html",
+    //     path: "../html/portfolio.html",
     //     description: "개인 포트폴리오 웹사이트"
     // },
 
@@ -43,7 +49,7 @@ const filesData = [
     // {
     //     name: "Header Image",
     //     type: "img",
-    //     path: "img/header-bg.jpg",
+    //     path: "../img/header-bg.jpg",
     //     description: "웹사이트 헤더 배경 이미지"
     // },
 
@@ -53,7 +59,7 @@ const filesData = [
     // {
     //     name: "Product Demo Video",
     //     type: "video",
-    //     path: "video/product-demo.mp4",
+    //     path: "../video/product-demo.mp4",
     //     description: "제품 시연 영상"
     // }
 ];

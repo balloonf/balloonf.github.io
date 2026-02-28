@@ -1,0 +1,92 @@
+/* ============================================================
+   themes.css — 디자인 토큰 (CSS 변수)
+   ============================================================ */
+:root {
+    /* === 브랜드 그라디언트 === */
+    --gradient-brand:   linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-hero:    linear-gradient(135deg, #f093fb 0%, #f5576c 40%, #667eea 100%);
+    --gradient-warm:    linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+    --gradient-cool:    linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-purple:  linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    --gradient-sunset:  linear-gradient(135deg, #fd7743 0%, #ff6b9d 100%);
+    --gradient-ocean:   linear-gradient(135deg, #2980b9 0%, #6dd5fa 50%, #ffffff 100%);
+
+    /* === 핵심 색상 === */
+    --color-primary:        #7c3aed;   /* violet-600 */
+    --color-primary-dark:   #5b21b6;   /* violet-800 */
+    --color-primary-light:  #a78bfa;   /* violet-400 */
+    --color-secondary:      #ec4899;   /* pink-500 */
+    --color-accent:         #06b6d4;   /* cyan-500 */
+    --color-success:        #10b981;   /* emerald-500 */
+    --color-warning:        #f59e0b;   /* amber-500 */
+    --color-danger:         #ef4444;   /* red-500 */
+
+    /* === 태그 색상 === */
+    --tag-javascript:   #f59e0b;
+    --tag-typescript:   #3b82f6;
+    --tag-css:          #8b5cf6;
+    --tag-html:         #ef4444;
+    --tag-web:          #10b981;
+    --tag-tips:         #ec4899;
+    --tag-review:       #f97316;
+    --tag-etc:          #6b7280;
+
+    /* === 배경 === */
+    --color-bg:             #fafafa;
+    --color-bg-secondary:   #f3f4f6;
+    --color-bg-card:        #ffffff;
+    --color-bg-hover:       #f5f3ff;
+    --color-bg-code:        #1e1e2e;
+
+    /* === 텍스트 === */
+    --color-text-primary:   #111827;
+    --color-text-secondary: #6b7280;
+    --color-text-muted:     #9ca3af;
+    --color-text-inverse:   #ffffff;
+
+    /* === 보더 & 그림자 === */
+    --color-border:         #e5e7eb;
+    --color-border-strong:  #d1d5db;
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:  0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg:  0 8px 24px rgba(0,0,0,0.12);
+    --shadow-xl:  0 16px 40px rgba(0,0,0,0.16);
+    --shadow-color: 0 8px 24px rgba(124,58,237,0.25);
+
+    /* === 간격 === */
+    --space-1:  0.25rem;
+    --space-2:  0.5rem;
+    --space-3:  0.75rem;
+    --space-4:  1rem;
+    --space-5:  1.25rem;
+    --space-6:  1.5rem;
+    --space-8:  2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    /* === 둥글기 === */
+    --radius-sm:   6px;
+    --radius-md:   10px;
+    --radius-lg:   16px;
+    --radius-xl:   24px;
+    --radius-full: 9999px;
+
+    /* === 폰트 === */
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI',
+                 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+
+    /* === 전환 === */
+    --ease-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-slow:   500ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* === 레이아웃 === */
+    --container-max: 1100px;
+    --header-height: 64px;
+}

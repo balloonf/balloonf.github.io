@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="balloonf 아카이브 — HTML 프로젝트, 이미지, 동영상 파일 호스팅">
+    <title>아카이브 | balloonf</title>
+    <!-- 블로그와 동일한 디자인 토큰 공유 -->
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/archive.css">
+</head>
+<body>
+
+    <!-- ===== 블로그 브랜드 통일 네비게이션 ===== -->
+    <header class="archive-nav" id="archive-nav">
+        <div class="container">
+            <div class="archive-nav__inner">
+
+                <!-- 브랜드 로고 (블로그 홈으로 이동) -->
+                <a href="/" class="archive-nav__brand" aria-label="블로그 홈으로">
+                    <span class="archive-nav__brand-text">balloonf</span>
+                    <span class="archive-nav__brand-dot">.</span>
+                </a>
+
+                <!-- 아카이브 타이틀 -->
+                <div class="archive-nav__center">
+                    <span class="archive-nav__icon" aria-hidden="true">🗂️</span>
+                    <span class="archive-nav__title">아카이브</span>
+                </div>
+
+                <!-- 블로그 홈 링크 -->
+                <a href="/" class="archive-nav__back">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    블로그 홈
+                </a>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== 서브 히어로 (파일 수 통계) ===== -->
+    <div class="archive-hero">
+        <div class="container">
+            <div class="archive-hero__inner">
+                <div>
+                    <p class="archive-hero__subtitle">파일을 업로드하고 URL로 바로 공유하세요</p>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="total-files">0</span>
+                    <span class="stat-label">전체 파일</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 메인 콘텐츠 ===== -->
+    <main class="main">
+        <div class="container">
+
+            <!-- 검색바 -->
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20"
+                         fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z"
+                              stroke="currentColor" stroke-width="2"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
+                        placeholder="파일 이름으로 검색..."
+                        autocomplete="off"
+                        aria-label="파일 검색"
+                    >
+                    <kbd class="search-shortcut">ESC</kbd>
+                </div>
+            </div>
+
+            <!-- 카테고리 탭 -->
+            <div class="tabs" role="tablist" aria-label="파일 카테고리">
+                <button class="tab active" data-category="all" role="tab" aria-selected="true">
+                    <span class="tab-icon" aria-hidden="true">📋</span>
+                    <span class="tab-text">전체</span>
+                </button>
+                <button class="tab" data-category="html" role="tab" aria-selected="false">
+                    <span class="tab-icon" aria-hidden="true">🌐</span>
+                    <span class="tab-text">웹 프로젝트</span>
+                </button>
+                <button class="tab" data-category="img" role="tab" aria-selected="false">
+                    <span class="tab-icon" aria-hidden="true">🖼️</span>
+                    <span class="tab-text">이미지</span>
+                </button>
+                <button class="tab" data-category="video" role="tab" aria-selected="false">
+                    <span class="tab-icon" aria-hidden="true">🎬</span>
+                    <span class="tab-text">동영상</span>
+                </button>
+            </div>
+
+            <!-- 파일 목록 -->
+            <div id="file-list" class="file-list" aria-live="polite"></div>
+
+            <!-- 빈 상태 -->
+            <div id="empty-state" class="empty-state" style="display:none;">
+                <div class="empty-icon">🔍</div>
+                <p class="empty-title">파일을 찾을 수 없습니다</p>
+                <small class="empty-desc">검색어나 필터를 변경해보세요</small>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ===== 푸터 ===== -->
+    <footer class="archive-footer">
+        <div class="container">
+            <div class="archive-footer__inner">
+                <p class="archive-footer__copy">
+                    © <span id="footer-year"></span>
+                    <a href="/" class="archive-footer__brand">balloonf</a>
+                    · GitHub Pages
+                </p>
+                <a href="/" class="archive-footer__link">← 블로그 홈으로</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 스크립트 -->
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    <script src="../js/data.js"></script>
+    <script src="../js/archive-main.js"></script>
+    <script>
+        // 스크롤 시 네비 그림자
+        const nav = document.getElementById('archive-nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 8);
+        }, { passive: true });
+    </script>
+</body>
+</html>

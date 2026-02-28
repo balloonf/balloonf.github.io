@@ -1,0 +1,128 @@
+/* ============================================================
+   animations.css — 키프레임 & 애니메이션 유틸리티
+   ============================================================ */
+
+/* === 기본 진입 애니메이션 === */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0);     }
+}
+
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* === 루프 애니메이션 === */
+@keyframes float {
+    0%, 100% { transform: translateY(0);     }
+    50%       { transform: translateY(-12px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1;   }
+    50%       { opacity: 0.5; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes gradientShift {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+}
+
+/* 배경 오브 흐름 */
+@keyframes blobMove {
+    0%   { transform: translate(0, 0)     scale(1);    }
+    33%  { transform: translate(30px, -30px) scale(1.05); }
+    66%  { transform: translate(-20px, 20px) scale(0.95); }
+    100% { transform: translate(0, 0)     scale(1);    }
+}
+
+/* 햄버거 → X 전환용 */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* === 스켈레톤 shimmer === */
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+/* ============================================================
+   유틸리티 클래스
+   ============================================================ */
+.animate-fade-in      { animation: fadeIn     var(--ease-normal) both; }
+.animate-fade-in-up   { animation: fadeInUp   var(--ease-normal) both; }
+.animate-fade-in-down { animation: fadeInDown var(--ease-normal) both; }
+.animate-scale        { animation: scaleIn    var(--ease-bounce) both; }
+.animate-float        { animation: float 3s ease-in-out infinite; }
+.animate-page         { animation: pageEnter  var(--ease-normal) both; }
+
+/* 딜레이 헬퍼 */
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.40s; }
+
+/* ============================================================
+   스크롤 리빌 (IntersectionObserver와 함께 사용)
+   ============================================================ */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity  var(--ease-slow),
+        transform var(--ease-slow);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================================
+   스켈레톤 로더
+   ============================================================ */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--color-bg-secondary) 25%,
+        var(--color-border)       50%,
+        var(--color-bg-secondary) 75%
+    );
+    background-size: 400px 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: var(--radius-md);
+}
