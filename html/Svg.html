@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Printer SVG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --printer-color: #374151;
+            --paper-color: #ffffff;
+            --accent-color: #3b82f6;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f3f4f6;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        /* 프린터 전체 컨테이너 애니메이션 (흔들림) */
+        .printer-body {
+            animation: shake 2s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(0.5deg); }
+            75% { transform: rotate(-0.5deg); }
+        }
+
+        /* 종이가 나오는 애니메이션 */
+        .paper {
+            animation: print 2s infinite linear;
+        }
+
+        @keyframes print {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(40px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+        }
+
+        /* 버튼 빛나는 효과 */
+        .power-light {
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from { fill: #10b981; opacity: 1; }
+            to { fill: #10b981; opacity: 0.4; }
+        }
+
+        .card {
+            background: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- 배경 종이 (나오는 부분) -->
+                <rect class="paper" x="60" y="110" width="80" height="60" fill="white" stroke="#e5e7eb" stroke-width="2" rx="2" />
+                
+                <!-- 출력되는 내용 (가상의 줄) -->
+                <g class="paper">
+                    <line x1="70" y1="125" x2="130" y2="125" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" />
+                    <line x1="70" y1="135" x2="110" y2="135" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" />
+                    <line x1="70" y1="145" x2="120" y2="145" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" />
+                </g>
+
+                <!-- 프린터 본체 하단 -->
+                <g class="printer-body">
+                    <!-- 하단 베이스 -->
+                    <path d="M40 100 C40 90 50 85 60 85 H140 C150 85 160 90 160 100 V130 H40 V100 Z" fill="var(--printer-color)" />
+                    
+                    <!-- 종이 투입구 상단 -->
+                    <rect x="55" y="65" width="90" height="30" fill="#4b5563" rx="4" />
+                    <rect x="65" y="55" width="70" height="15" fill="#9ca3af" rx="2" />
+
+                    <!-- 출력 슬롯 -->
+                    <rect x="55" y="110" width="90" height="8" fill="#1f2937" rx="4" />
+
+                    <!-- 조작 패널 & 버튼 -->
+                    <rect x="135" y="95" width="15" height="15" fill="#1f2937" rx="2" />
+                    <circle class="power-light" cx="142.5" cy="102.5" r="3" />
+                </g>
+            </svg>
+
+            <h1 class="text-2xl font-bold text-gray-800 mt-6">문서 출력 중...</h1>
+            <p class="text-gray-500 mt-2">부드러운 SVG 애니메이션 효과</p>
+        </div>
+    </div>
+
+</body>
+</html>
