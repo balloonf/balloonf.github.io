@@ -36,9 +36,14 @@ function createFileCard(file) {
     const icon = fileIcons[file.type] || fileIcons.default;
     const typeLabel = fileTypeLabels[file.type] || '파일';
 
+    // 이미지 파일은 썸네일 미리보기 표시
+    const iconHTML = file.thumbnail
+        ? `<div class="file-card__thumbnail"><img src="${file.thumbnail}" alt="${file.name}" loading="lazy"></div>`
+        : `<div class="file-card__icon">${icon}</div>`;
+
     return `
         <a href="${file.path}" class="file-card" data-type="${file.type}" target="_blank">
-            <div class="file-card__icon">${icon}</div>
+            ${iconHTML}
             <div class="file-card__content">
                 <div class="file-card__title">${file.name}</div>
                 <div class="file-card__meta">${file.description || '설명 없음'}</div>
@@ -218,10 +223,29 @@ document.addEventListener('keydown', (e) => {
 // ========================================
 
 /**
- * 앱 초기화
+ * 로딩 상태 표시/숨김
  */
-function initApp() {
-    console.log('🚀 개인 아카이브 초기화 완료');
+function setLoading(isLoading) {
+    const loadingEl = document.getElementById('loading-state');
+    if (loadingEl) {
+        loadingEl.style.display = isLoading ? 'block' : 'none';
+    }
+    if (isLoading) {
+        fileListContainer.textContent = '';
+        emptyStateElement.style.display = 'none';
+    }
+}
+
+/**
+ * 앱 초기화 (비동기 - GitHub API에서 파일 목록 로드)
+ */
+async function initApp() {
+    setLoading(true);
+
+    await loadFilesFromGitHub();
+
+    setLoading(false);
+
     console.log(`📦 총 ${filesData.length}개의 파일 로드됨`);
 
     // 통계 업데이트

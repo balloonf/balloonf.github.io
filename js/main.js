@@ -1,6 +1,6 @@
 /**
  * main.js — 앱 진입점
- * 컴포넌트 초기화 → 라우트 등록 → 라우터 시작
+ * GitHub API에서 포스트를 로드한 뒤 컴포넌트 초기화 → 라우트 등록 → 라우터 시작
  */
 
 /**
@@ -35,12 +35,47 @@ function withTransition(renderFn) {
     };
 }
 
-function initApp() {
-    // 1. 공통 컴포넌트 렌더링
+/**
+ * 로딩 상태 표시/숨김
+ */
+function showAppLoading() {
+    const root = document.querySelector('#page-root');
+    if (!root) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'app-loading';
+
+    const spinner = document.createElement('div');
+    spinner.className = 'loading-spinner';
+
+    const text = document.createElement('p');
+    text.textContent = '불러오는 중...';
+
+    wrapper.appendChild(spinner);
+    wrapper.appendChild(text);
+    root.appendChild(wrapper);
+}
+
+function hideAppLoading() {
+    const el = document.querySelector('.app-loading');
+    if (el) el.remove();
+}
+
+async function initApp() {
+    // 1. 로딩 표시
+    showAppLoading();
+
+    // 2. GitHub API에서 포스트 로드
+    await loadPostsFromGitHub();
+    refreshPostDerivedData();
+
+    // 3. 로딩 숨김
+    hideAppLoading();
+
+    // 4. 공통 컴포넌트 렌더링
     Header.render('#header-root');
     Footer.render('#footer-root');
 
-    // 2. 라우트 등록
+    // 5. 라우트 등록
     Router.register('/', withTransition(() => {
         setTitle();
         HomePage.render('#page-root');
@@ -53,7 +88,6 @@ function initApp() {
     }));
 
     Router.register('/post/:id', withTransition(({ params }) => {
-        // 포스트 제목은 PostPage.render() 내부에서 설정
         PostPage.render('#page-root', params.id);
     }));
 
@@ -62,7 +96,7 @@ function initApp() {
         AboutPage.render('#page-root');
     }));
 
-    // 3. 라우터 시작
+    // 6. 라우터 시작
     Router.init();
 }
 
