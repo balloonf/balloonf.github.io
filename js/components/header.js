@@ -41,6 +41,14 @@ const Header = {
                         </li>
                     </ul>
 
+                    <!-- 테마 토글 -->
+                    <button
+                        class="nav__theme-toggle"
+                        id="theme-toggle"
+                        aria-label="다크 모드로 전환"
+                        type="button"
+                    ></button>
+
                     <!-- 모바일 햄버거 -->
                     <button
                         class="nav__hamburger"
@@ -79,6 +87,13 @@ const Header = {
                 hamburger?.setAttribute('aria-expanded', 'false');
             });
         });
+
+        // 테마 토글
+        const themeToggle = root.querySelector('#theme-toggle');
+        if (themeToggle) {
+            ThemeManager._updateToggleIcon();
+            themeToggle.addEventListener('click', () => ThemeManager.toggle());
+        }
 
         // 스크롤 시 헤더 그림자
         const onScroll = () => {

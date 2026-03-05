@@ -6,6 +6,7 @@
     <meta name="description" content="balloonf의 기술 블로그 — 웹 개발과 기술에 대한 이야기">
     <title>balloonf</title>
 
+    <script>(()=>{const t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})()</script>
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/style.css">
@@ -18,6 +19,8 @@
     </div>
 
     <!-- 유틸리티 -->
+    <script src="js/utils/theme.js"></script>
+    <script src="js/utils/scrollReveal.js"></script>
     <script src="js/utils/markdown.js"></script>
 
     <!-- 컴포넌트 -->

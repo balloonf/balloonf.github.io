@@ -33,8 +33,8 @@ const BlogPage = {
 
                 <!-- 헤더 -->
                 <div class="blog-header">
-                    <h1 class="blog-title">블로그</h1>
-                    <p class="blog-desc">웹 개발과 기술에 대한 이야기들</p>
+                    <h1 class="blog-title blog-title--gradient">블로그</h1>
+                    <p class="blog-desc">웹 개발과 기술에 대한 이야기들 · <strong>${sortedPosts.length}개의 글</strong></p>
                 </div>
 
                 <!-- 태그 필터 -->
@@ -108,13 +108,18 @@ const BlogPage = {
         const filterEl = root.querySelector('#tag-filter');
         if (filterEl) filterEl.innerHTML = this._renderFilterBtns();
 
-        // 글 목록 갱신 + 카드 진입 애니메이션
+        // 글 목록 갱신 + 카드 진입 애니메이션 (content is generated from app data, not user input)
         const listEl = root.querySelector('#post-list');
         if (listEl) {
-            listEl.innerHTML = this._renderPosts();
-            listEl.querySelectorAll('.post-card').forEach((card, i) => {
-                card.style.animation = `fadeInUp 0.35s ease ${i * 0.06}s both`;
-            });
+            listEl.style.opacity = '0';
+            setTimeout(() => {
+                listEl.innerHTML = this._renderPosts(); // safe: generated from internal post data
+                listEl.style.opacity = '';
+                listEl.querySelectorAll('.post-card').forEach((card, i) => {
+                    card.classList.add('animate-fade-in-up');
+                    card.style.animationDelay = `${i * 0.06}s`;
+                });
+            }, 150);
         }
     },
 };

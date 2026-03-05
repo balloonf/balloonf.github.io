@@ -58,7 +58,7 @@ button { font-family: inherit; }
     top: 0;
     z-index: 200;
     height: var(--header-height);
-    background: rgba(250, 250, 250, 0.82);
+    background: var(--glass-bg);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid transparent;
@@ -132,6 +132,44 @@ button { font-family: inherit; }
     color: var(--color-primary);
     background: var(--color-bg-hover);
     font-weight: 600;
+}
+
+/* 테마 토글 버튼 */
+.nav__theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: none;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: all var(--ease-fast);
+    flex-shrink: 0;
+}
+.nav__theme-toggle:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary-light);
+    background: var(--color-bg-hover);
+}
+
+/* 활성 링크 animated underline */
+.nav__link.active {
+    position: relative;
+}
+.nav__link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: var(--space-4);
+    right: var(--space-4);
+    height: 2px;
+    background: var(--gradient-brand);
+    border-radius: 1px;
+    animation: scaleIn var(--ease-normal) both;
 }
 
 /* 햄버거 */
@@ -246,8 +284,8 @@ button { font-family: inherit; }
 
 .btn--ghost {
     background: rgba(255,255,255,0.18);
-    color: var(--color-text-inverse);
-    border: 1.5px solid rgba(255,255,255,0.4);
+    color: #ffffff;
+    border: 1.5px solid var(--glass-border);
     backdrop-filter: blur(8px);
 }
 .btn--ghost:hover {
@@ -349,6 +387,66 @@ button { font-family: inherit; }
     display: flex;
     gap: var(--space-4);
     flex-wrap: wrap;
+}
+
+/* 히어로 장식 요소 */
+.hero__decorations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.hero__dot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+}
+.hero__dot--1 {
+    width: 8px; height: 8px;
+    background: var(--color-primary);
+    top: 25%; right: 18%;
+    animation: float 4s ease-in-out infinite;
+}
+.hero__dot--2 {
+    width: 6px; height: 6px;
+    background: var(--color-secondary);
+    top: 55%; right: 28%;
+    animation: float 5s ease-in-out infinite 1s;
+}
+.hero__dot--3 {
+    width: 10px; height: 10px;
+    background: var(--color-accent);
+    bottom: 20%; left: 60%;
+    animation: float 6s ease-in-out infinite 0.5s;
+}
+
+/* 3번째 배경 blob */
+.hero__bg::before,
+.hero__bg::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+}
+
+/* CTA 버튼 glow */
+.btn--glow {
+    position: relative;
+}
+.btn--glow::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    background: var(--gradient-brand);
+    opacity: 0;
+    z-index: -1;
+    filter: blur(12px);
+    transition: opacity var(--ease-normal);
+}
+.btn--glow:hover::after {
+    opacity: 0.5;
 }
 
 /* ============================================================
@@ -469,7 +567,9 @@ button { font-family: inherit; }
         top: var(--header-height);
         left: 0;
         right: 0;
-        background: var(--color-bg-card);
+        background: var(--glass-bg-mobile);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--color-border);
         flex-direction: column;
         align-items: stretch;
@@ -528,11 +628,28 @@ button { font-family: inherit; }
     transition: transform var(--ease-normal), box-shadow var(--ease-normal),
                 border-color var(--ease-normal);
     overflow: hidden;
+    position: relative;
 }
+.post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gradient-brand);
+    opacity: 0;
+    transition: opacity var(--ease-fast);
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+.post-card:hover::before { opacity: 1; }
 .post-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) rotate(0.3deg);
     box-shadow: var(--shadow-lg);
     border-color: var(--color-primary-light);
+}
+[data-theme="dark"] .post-card:hover {
+    box-shadow: 0 8px 24px rgba(167,139,250,0.15);
 }
 
 .post-card__link {
@@ -644,9 +761,20 @@ button { font-family: inherit; }
     margin-bottom: var(--space-2);
 }
 
+.blog-title--gradient {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .blog-desc {
     color: var(--color-text-secondary);
     font-size: 1rem;
+}
+.blog-desc strong {
+    color: var(--color-primary);
+    font-weight: 600;
 }
 
 /* 태그 필터 바 */
@@ -743,7 +871,14 @@ button { font-family: inherit; }
     }
 
     .blog-title { font-size: 1.6rem; }
-    .tag-filter { gap: var(--space-2); }
+    .tag-filter {
+        gap: var(--space-2);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 24px), transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 24px), transparent);
+    }
 }
 
 /* ============================================================
@@ -756,9 +891,12 @@ button { font-family: inherit; }
     height: 3px;
     width: 0%;
     background: var(--gradient-brand);
+    background-size: 200% 100%;
+    animation: shimmer 2s ease infinite;
     z-index: 300;
     transition: width 80ms linear;
     pointer-events: none;
+    border-radius: 0 2px 2px 0;
 }
 
 /* ============================================================
@@ -854,7 +992,8 @@ button { font-family: inherit; }
     margin-top: var(--space-12);
     margin-bottom: var(--space-4);
     padding-bottom: var(--space-3);
-    border-bottom: 2px solid var(--color-border);
+    border-bottom: 2px solid transparent;
+    border-image: var(--gradient-brand) 1;
 }
 
 .prose h3 {
@@ -895,14 +1034,14 @@ button { font-family: inherit; }
     padding: var(--space-6);
     overflow-x: auto;
     margin: var(--space-6) 0;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-lg);
 }
 .prose pre code {
     background: none;
     border: none;
     padding: 0;
-    color: #e2e8f0;
+    color: #e2e8f0;  /* code text stays light in both modes */
     font-size: 0.9rem;
     line-height: 1.72;
 }
@@ -919,7 +1058,8 @@ button { font-family: inherit; }
 
 /* 인용 */
 .prose blockquote {
-    border-left: 4px solid var(--color-primary-light);
+    border-left: 4px solid transparent;
+    border-image: var(--gradient-brand) 1;
     background: var(--color-bg-hover);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
     padding: var(--space-4) var(--space-6);
@@ -973,6 +1113,10 @@ button { font-family: inherit; }
     color: var(--color-primary);
     text-transform: uppercase;
     letter-spacing: 0.07em;
+    transition: letter-spacing var(--ease-fast);
+}
+.post-nav__link:hover .post-nav__label {
+    letter-spacing: 0.12em;
 }
 
 .post-nav__title {
@@ -1094,7 +1238,7 @@ button { font-family: inherit; }
     border: 1.5px solid transparent;
 }
 .profile__link:hover {
-    background: #000;
+    background: var(--color-text-primary);
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
@@ -1238,19 +1382,19 @@ button { font-family: inherit; }
 
 .contact-card__desc {
     font-size: 0.9rem;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.85);
 }
 
 /* 연락 카드 안의 버튼은 ghost 스타일 */
 .contact-card .btn--primary {
-    background: white;
-    color: var(--color-primary);
+    background: #ffffff;
+    color: var(--color-primary-dark);
     box-shadow: none;
     white-space: nowrap;
     flex-shrink: 0;
 }
 .contact-card .btn--primary:hover {
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.92);
     box-shadow: var(--shadow-md);
 }
 
@@ -1279,7 +1423,7 @@ button { font-family: inherit; }
 
 /* 텍스트 선택 색상 */
 ::selection {
-    background: rgba(124, 58, 237, 0.18);
+    background: rgba(167, 139, 250, 0.25);
     color: var(--color-text-primary);
 }
 

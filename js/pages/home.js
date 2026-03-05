@@ -22,6 +22,11 @@ const HomePage = {
         <!-- ===== 히어로 ===== -->
         <section class="hero">
             <div class="hero__bg"></div>
+            <div class="hero__decorations">
+                <span class="hero__dot hero__dot--1"></span>
+                <span class="hero__dot hero__dot--2"></span>
+                <span class="hero__dot hero__dot--3"></span>
+            </div>
             <div class="container">
                 <div class="hero__content">
                     <p class="hero__eyebrow animate-fade-in-up">
@@ -35,8 +40,13 @@ const HomePage = {
                         배운 것들, 만든 것들, 생각한 것들을 나눕니다.
                     </p>
                     <div class="hero__cta animate-fade-in-up delay-3">
-                        <a href="#/blog" class="btn btn--primary">블로그 보기</a>
-                        <a href="#/about" class="btn btn--secondary" style="color:var(--color-primary);">소개 보기</a>
+                        <a href="#/blog" class="btn btn--primary btn--glow">
+                            블로그 보기
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="#/about" class="btn btn--secondary">소개 보기</a>
                     </div>
                 </div>
             </div>
@@ -58,15 +68,6 @@ const HomePage = {
     },
 
     _initScrollReveal(root) {
-        const observer = new IntersectionObserver(
-            entries => entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    observer.unobserve(e.target);
-                }
-            }),
-            { threshold: 0.1 }
-        );
-        root.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        ScrollReveal.init(root);
     },
 };

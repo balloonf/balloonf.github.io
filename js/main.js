@@ -21,17 +21,26 @@ function setTitle(sub) {
  */
 function withTransition(renderFn) {
     return (ctx) => {
-        // 스크롤 최상단으로
-        window.scrollTo({ top: 0, behavior: 'instant' });
-
-        // 애니메이션 리셋
         const root = document.querySelector('#page-root');
-        if (root) {
-            root.classList.remove('animate-page');
-            void root.offsetHeight; // force reflow
-        }
+        if (!root) { renderFn(ctx); return; }
 
-        renderFn(ctx);
+        // Exit animation
+        root.classList.add('page-exit');
+        root.classList.remove('page-enter', 'animate-page');
+
+        const doEnter = () => {
+            root.classList.remove('page-exit');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            renderFn(ctx);
+            root.classList.add('page-enter');
+        };
+
+        // Wait for exit animation (200ms) then enter
+        if (getComputedStyle(root).animationDuration !== '0s') {
+            setTimeout(doEnter, 200);
+        } else {
+            doEnter();
+        }
     };
 }
 
@@ -61,6 +70,9 @@ function hideAppLoading() {
 }
 
 async function initApp() {
+    // 0. 테마 초기화
+    ThemeManager.init();
+
     // 1. 로딩 표시
     showAppLoading();
 

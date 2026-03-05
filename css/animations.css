@@ -96,6 +96,13 @@
 .delay-4 { animation-delay: 0.32s; }
 .delay-5 { animation-delay: 0.40s; }
 
+/* === 페이지 전환 === */
+@keyframes pageExit {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+.page-exit { animation: pageExit 200ms ease-in forwards; }
+.page-enter { animation: pageEnter 400ms ease-out both; }
+
 /* ============================================================
    스크롤 리빌 (IntersectionObserver와 함께 사용)
    ============================================================ */
@@ -106,10 +113,28 @@
         opacity  var(--ease-slow),
         transform var(--ease-slow);
 }
+.reveal--left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition: opacity var(--ease-slow), transform var(--ease-slow);
+}
+.reveal--right {
+    opacity: 0;
+    transform: translateX(28px);
+    transition: opacity var(--ease-slow), transform var(--ease-slow);
+}
+.reveal--scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity var(--ease-slow), transform var(--ease-slow);
+}
 
-.reveal.visible {
+.reveal.visible,
+.reveal--left.visible,
+.reveal--right.visible,
+.reveal--scale.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateX(0) scale(1);
 }
 
 /* ============================================================
@@ -125,4 +150,24 @@
     background-size: 400px 100%;
     animation: shimmer 1.4s ease infinite;
     border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   마이크로 인터랙션
+   ============================================================ */
+.btn:active { transform: scale(0.97); }
+
+/* ============================================================
+   접근성 — 모션 감소 지원
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .reveal, .reveal--left, .reveal--right, .reveal--scale {
+        opacity: 1;
+        transform: none;
+    }
 }
