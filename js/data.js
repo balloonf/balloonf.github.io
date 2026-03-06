@@ -30,6 +30,21 @@ const extensionTypeMap = {
 let filesData = [];
 
 /**
+ * 하위폴더 캐시 (경로 → 파일/폴더 배열)
+ */
+const folderCache = new Map();
+
+/**
+ * 현재 탐색 중인 경로 (null = 루트)
+ */
+let currentPath = null;
+
+/**
+ * 폴더 최대 깊이 (루트 포함 3단계 = 하위 2단계)
+ */
+const MAX_DEPTH = 3;
+
+/**
  * API 실패 시 사용할 정적 fallback 데이터
  */
 const fallbackFilesData = [
@@ -74,6 +89,7 @@ const fileIcons = {
     html: "🌐",
     img: "🖼️",
     video: "🎬",
+    folder: "📁",
     default: "📄"
 };
 
@@ -83,7 +99,8 @@ const fileIcons = {
 const fileTypeLabels = {
     html: "웹 프로젝트",
     img: "이미지",
-    video: "동영상"
+    video: "동영상",
+    folder: "폴더"
 };
 
 /**
@@ -110,8 +127,21 @@ async function loadFilesFromGitHub() {
             if (!Array.isArray(files)) continue;
 
             for (const file of files) {
-                if (file.type !== 'file') continue;
                 if (file.name === '.gitkeep') continue;
+
+                // 폴더 엔트리
+                if (file.type === 'dir') {
+                    allFiles.push({
+                        name: file.name,
+                        type: 'folder',
+                        path: `${dir}/${file.name}`,
+                        parentDir: dir,
+                        description: '폴더'
+                    });
+                    continue;
+                }
+
+                if (file.type !== 'file') continue;
 
                 const fileType = getFileType(file.name);
                 if (!fileType) continue;
@@ -145,4 +175,92 @@ async function loadFilesFromGitHub() {
         filesData = fallbackFilesData;
         return false;
     }
+}
+
+/**
+ * 하위폴더 콘텐츠를 로드 (lazy loading + 캐시)
+ * @param {string} dirPath - 예: 'img/photos'
+ * @returns {Promise<Array>} 파일/폴더 엔트리 배열
+ */
+async function loadSubfolder(dirPath) {
+    // 캐시 확인
+    if (folderCache.has(dirPath)) {
+        return folderCache.get(dirPath);
+    }
+
+    // 깊이 체크
+    const depth = dirPath.split('/').length;
+    if (depth >= MAX_DEPTH) {
+        console.warn(`최대 폴더 깊이(${MAX_DEPTH}) 초과: ${dirPath}`);
+        return [];
+    }
+
+    try {
+        const res = await fetch(`${GITHUB_API_BASE}/${dirPath}`);
+        if (!res.ok) throw new Error(`${dirPath}: ${res.status}`);
+        const items = await res.json();
+
+        if (!Array.isArray(items)) return [];
+
+        const entries = [];
+        for (const item of items) {
+            if (item.name === '.gitkeep') continue;
+
+            if (item.type === 'dir') {
+                // 최대 깊이 미만일 때만 하위 폴더 표시
+                if (depth + 1 < MAX_DEPTH) {
+                    entries.push({
+                        name: item.name,
+                        type: 'folder',
+                        path: `${dirPath}/${item.name}`,
+                        parentDir: dirPath,
+                        description: '폴더'
+                    });
+                }
+                continue;
+            }
+
+            if (item.type !== 'file') continue;
+
+            const fileType = getFileType(item.name);
+            if (!fileType) continue;
+
+            const entry = {
+                name: formatFileName(item.name),
+                type: fileType,
+                path: `../${dirPath}/${item.name}`,
+                description: fileTypeLabels[fileType] || ''
+            };
+
+            if (fileType === 'img') {
+                entry.thumbnail = getRawUrl(`${dirPath}/${item.name}`);
+            }
+
+            entries.push(entry);
+        }
+
+        folderCache.set(dirPath, entries);
+        return entries;
+    } catch (error) {
+        console.warn(`하위폴더 로드 실패: ${dirPath}`, error);
+        return [];
+    }
+}
+
+/**
+ * 경로를 브레드크럼용 세그먼트로 분해
+ * @param {string} dirPath - 예: 'img/photos/vacation'
+ * @returns {Array<{name: string, path: string|null}>}
+ */
+function getPathSegments(dirPath) {
+    if (!dirPath) return [];
+    const parts = dirPath.split('/');
+    const segments = [{ name: '루트', path: null }];
+    for (let i = 0; i < parts.length; i++) {
+        segments.push({
+            name: parts[i],
+            path: parts.slice(0, i + 1).join('/')
+        });
+    }
+    return segments;
 }

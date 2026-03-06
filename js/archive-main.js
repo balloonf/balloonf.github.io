@@ -13,6 +13,7 @@
 // ========================================
 let currentFilter = 'all'; // 현재 활성화된 필터
 let currentSearchQuery = ''; // 현재 검색어
+let currentFolderPath = null; // 현재 폴더 경로 (null = 루트)
 
 // ========================================
 // DOM Elements
@@ -22,6 +23,7 @@ const emptyStateElement = document.getElementById('empty-state');
 const searchInput = document.getElementById('search-input');
 const tabs = document.querySelectorAll('.tab');
 const totalFilesElement = document.getElementById('total-files');
+const breadcrumbElement = document.getElementById('breadcrumb');
 
 // ========================================
 // Render Functions
@@ -54,6 +56,110 @@ function createFileCard(file) {
 }
 
 /**
+ * 폴더 카드 HTML 생성
+ * @param {Object} folder - 폴더 객체
+ * @returns {string} HTML 문자열
+ */
+function createFolderCard(folder) {
+    const escapedName = folder.name.replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+    const escapedPath = folder.path.replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+    return `
+        <div class="file-card folder-card" data-type="folder" data-path="${escapedPath}" role="button" tabindex="0">
+            <div class="file-card__icon folder-icon">📁</div>
+            <div class="file-card__content">
+                <div class="file-card__title">${escapedName}</div>
+                <div class="file-card__meta">폴더</div>
+                <span class="file-card__badge folder-badge">폴더</span>
+            </div>
+            <svg class="folder-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    `;
+}
+
+/**
+ * 브레드크럼 렌더링
+ */
+function createBreadcrumb() {
+    if (!currentFolderPath) {
+        breadcrumbElement.style.display = 'none';
+        return;
+    }
+
+    const segments = getPathSegments(currentFolderPath);
+    breadcrumbElement.textContent = '';
+
+    segments.forEach((seg, i) => {
+        const isLast = i === segments.length - 1;
+        if (isLast) {
+            const span = document.createElement('span');
+            span.className = 'breadcrumb__current';
+            span.textContent = seg.name;
+            breadcrumbElement.appendChild(span);
+        } else {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.className = 'breadcrumb__link';
+            link.dataset.path = seg.path === null ? '' : seg.path;
+            link.textContent = seg.name;
+            breadcrumbElement.appendChild(link);
+
+            const sep = document.createElement('span');
+            sep.className = 'breadcrumb__separator';
+            sep.textContent = '/';
+            breadcrumbElement.appendChild(sep);
+        }
+    });
+
+    breadcrumbElement.style.display = 'flex';
+}
+
+/**
+ * 폴더로 이동
+ * @param {string|null} path - 폴더 경로 (null = 루트)
+ */
+async function navigateToFolder(path) {
+    currentFolderPath = path;
+    currentPath = path;
+
+    createBreadcrumb();
+
+    if (path === null) {
+        applyFiltersAndSearch();
+        return;
+    }
+
+    setLoading(true);
+    const entries = await loadSubfolder(path);
+    setLoading(false);
+
+    applyFiltersAndSearchForEntries(entries);
+}
+
+/**
+ * 특정 엔트리 배열에 필터/검색 적용 후 렌더링
+ */
+function applyFiltersAndSearchForEntries(entries) {
+    let filtered = entries;
+
+    if (currentFilter !== 'all') {
+        filtered = filtered.filter(e => e.type === currentFilter || e.type === 'folder');
+    }
+
+    if (currentSearchQuery) {
+        const query = currentSearchQuery.toLowerCase();
+        filtered = filtered.filter(e => {
+            const nameMatch = e.name.toLowerCase().includes(query);
+            const descMatch = e.description && e.description.toLowerCase().includes(query);
+            return nameMatch || descMatch;
+        });
+    }
+
+    renderFiles(filtered);
+}
+
+/**
  * 파일 목록 렌더링
  * @param {Array} files - 렌더링할 파일 배열
  */
@@ -65,13 +171,16 @@ function renderFiles(files) {
         return;
     }
 
-    // 파일이 있을 때
+    // 파일이 있을 때 — 폴더를 앞에 배치
     emptyStateElement.style.display = 'none';
-    const cardsHTML = files.map(file => createFileCard(file)).join('');
+    const folders = files.filter(f => f.type === 'folder');
+    const regularFiles = files.filter(f => f.type !== 'folder');
+    const cardsHTML = folders.map(f => createFolderCard(f)).join('')
+                    + regularFiles.map(f => createFileCard(f)).join('');
     fileListContainer.innerHTML = cardsHTML;
 
     // 페이드인 애니메이션 적용
-    const cards = fileListContainer.querySelectorAll('.file-card');
+    const cards = fileListContainer.querySelectorAll('.file-card, .folder-card');
     cards.forEach((card, index) => {
         card.style.animation = `fadeInUp 0.4s ease ${index * 0.05}s both`;
     });
@@ -81,7 +190,7 @@ function renderFiles(files) {
  * 통계 정보 업데이트
  */
 function updateStats() {
-    const totalFiles = filesData.length;
+    const totalFiles = filesData.filter(f => f.type !== 'folder').length;
 
     // 숫자 애니메이션 효과
     animateNumber(totalFilesElement, 0, totalFiles, 1000);
@@ -123,11 +232,18 @@ function animateNumber(element, start, end, duration) {
  * 필터링 및 검색 적용
  */
 function applyFiltersAndSearch() {
+    // 하위폴더 내에서는 캐시된 데이터 사용
+    if (currentFolderPath) {
+        const entries = folderCache.get(currentFolderPath) || [];
+        applyFiltersAndSearchForEntries(entries);
+        return;
+    }
+
     let filteredFiles = filesData;
 
     // 1. 카테고리 필터링
     if (currentFilter !== 'all') {
-        filteredFiles = filteredFiles.filter(file => file.type === currentFilter);
+        filteredFiles = filteredFiles.filter(file => file.type === currentFilter || file.type === 'folder');
     }
 
     // 2. 검색어 필터링
@@ -216,6 +332,40 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         searchInput.focus();
     }
+});
+
+// ========================================
+// Folder Navigation Events
+// ========================================
+
+/**
+ * 폴더 카드 클릭 이벤트 위임
+ */
+fileListContainer.addEventListener('click', (e) => {
+    const folderCard = e.target.closest('.folder-card');
+    if (!folderCard) return;
+    e.preventDefault();
+    const path = folderCard.dataset.path;
+    if (path) navigateToFolder(path);
+});
+
+fileListContainer.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const folderCard = e.target.closest('.folder-card');
+    if (!folderCard) return;
+    const path = folderCard.dataset.path;
+    if (path) navigateToFolder(path);
+});
+
+/**
+ * 브레드크럼 클릭 이벤트
+ */
+breadcrumbElement.addEventListener('click', (e) => {
+    const link = e.target.closest('.breadcrumb__link');
+    if (!link) return;
+    e.preventDefault();
+    const path = link.dataset.path;
+    navigateToFolder(path === '' ? null : path);
 });
 
 // ========================================
