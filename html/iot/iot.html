@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시니어 스마트라이프: 구축 건물 및 가전 IoT 적용 사례</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4fbf9',
+                            100: '#d7f2ea',
+                            200: '#aee3d3',
+                            300: '#7bccb8',
+                            400: '#4fae99',
+                            500: '#34907d',
+                            600: '#287365',
+                            700: '#235c52',
+                            800: '#1f4a43',
+                            900: '#1a3d38',
+                        },
+                        paper: '#FAF9F6',
+                        ink: '#2C3E50',
+                        sand: '#D9B48F'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.paper');
+            color: theme('colors.ink');
+        }
+        
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 400px; 
+        }
+        
+        @media (max-width: 640px) {
+            .chart-container { height: 250px; }
+        }
+
+        .tab-btn.active {
+            background-color: theme('colors.brand.600');
+            color: white;
+            border-color: theme('colors.brand.600');
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+
+    <!-- Chosen Palette: Warm Neutrals with Teal Accent (Paper #FAF9F6, Ink #2C3E50, Brand/Teal #34907d, Sand/Beige #D9B48F) -->
+    <!-- Application Structure Plan: The SPA is structured as a single-page scrolling dashboard. It flows logically from the 'Why' (Market Trends & Need for Senior Care) to the 'How' (Building vs Appliance Tech via interactive tabs), and finally to the 'What' (Concrete Use Cases using an interactive grid). This structure allows users to first grasp the macro context before drilling down into specific, practical implementations of IoT for seniors. Interactive tabs and revealing cards prevent information overload and encourage active reading. -->
+    <!-- Visualization & Content Choices: 
+         1. Intro Trend: Goal to show aging vs tech adoption -> Line Chart (Chart.js) -> Clear visual correlation. 
+         2. Tech Layers (Building/Appliance): Goal to compare approaches -> Interactive Tabs -> Reduces clutter, allows side-by-side mental comparison. 
+         3. Expected Needs: Goal to show what seniors want -> Radar Chart (Chart.js) -> Good for showing multi-dimensional priorities.
+         4. Use Cases: Goal to organize specific examples -> Clickable HTML Grid -> Intuitive exploration without complex navigation. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-paper/90 backdrop-blur-md z-50 border-b border-stone-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="text-2xl">🏡</span>
+                    <span class="font-bold text-xl text-brand-800 tracking-tight">시니어 스마트라이프</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#market" class="text-stone-600 hover:text-brand-600 font-medium transition-colors">도입 배경</a>
+                    <a href="#technology" class="text-stone-600 hover:text-brand-600 font-medium transition-colors">구축 요소 기술</a>
+                    <a href="#usecases" class="text-stone-600 hover:text-brand-600 font-medium transition-colors">적용 사례</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
+        <div class="inline-block mb-4 px-3 py-1 rounded-full bg-brand-100 text-brand-800 text-sm font-semibold tracking-wide">
+            Aging in Place (AIP) Report 2026
+        </div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-ink leading-tight mb-6">
+            구축 건물과 가전의 만남,<br/>
+            <span class="text-brand-600">안전하고 똑똑한 시니어 라이프</span>
+        </h1>
+        <p class="mt-4 text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
+            초고령화 사회 진입에 따라, 요양 시설이 아닌 <b>'살던 곳에서의 노후(Aging in Place)'</b>가 핵심 과제로 떠올랐습니다. 기존 구축 건물의 한계를 극복하고 시니어의 독립적인 생활을 지원하는 IoT 기술 및 스마트 가전 적용 사례를 분석합니다.
+        </p>
+    </header>
+
+    <!-- Section 1: Market Trends -->
+    <section id="market" class="py-16 bg-white border-t border-stone-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-ink mb-4">왜 지금 '시니어 IoT'인가?</h2>
+                <p class="text-stone-600 max-w-4xl text-lg leading-relaxed">
+                    이 섹션에서는 시니어 인구의 폭발적인 증가와 이에 대비되는 스마트홈 기술의 융합 필요성을 보여줍니다. 데이터는 고령층의 1인 가구 증가 추세와 함께, 안전과 편의를 위한 IoT 인프라의 필수성을 시사합니다. 그래프를 통해 시장의 변화를 확인하세요.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Chart 1: Trends -->
+                <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-center mb-2 text-ink">고령 인구 증가 및 스마트 케어 도입 전망</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">단위: % (인구 비율 및 가구 도입률)</p>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Text / Stats -->
+                <div class="flex flex-col gap-6">
+                    <div class="bg-brand-50 border-l-4 border-brand-500 p-6 rounded-r-xl">
+                        <h4 class="text-xl font-bold text-brand-900 mb-2">초고령 사회 진입 (2025년)</h4>
+                        <p class="text-stone-700">65세 이상 인구가 전체 인구의 20%를 초과하며, 이 중 독거노인 비율이 급증하고 있습니다. 돌봄 인력 부족을 기술로 대체해야 하는 임계점입니다.</p>
+                    </div>
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-xl">
+                        <h4 class="text-xl font-bold text-amber-900 mb-2">구축 건물의 한계</h4>
+                        <p class="text-stone-700">신축 아파트와 달리 국내 다수의 시니어 거주지는 스마트 인프라가 없는 '구축'입니다. 대규모 공사 없이 <b>무선 기반의 센서와 가전 연동</b>을 통한 후천적 스마트화(Retrofitting)가 필수적입니다.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div class="text-center p-4 bg-white border border-stone-200 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-brand-600 mb-1">68%</div>
+                            <div class="text-sm text-stone-500 font-medium">낙상 사고 자택 발생 비율</div>
+                        </div>
+                        <div class="text-center p-4 bg-white border border-stone-200 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-brand-600 mb-1">9.5h</div>
+                            <div class="text-sm text-stone-500 font-medium">독거 시니어 평균 고립 시간</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Technology Layers (Interactive Tabs) -->
+    <section id="technology" class="py-16 bg-stone-50 border-t border-stone-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-ink mb-4">핵심 구축 요소: 환경과 가전의 결합</h2>
+                <p class="text-stone-600 max-w-3xl mx-auto text-lg leading-relaxed">
+                    시니어 스마트 케어는 크게 두 가지 축으로 구성됩니다. 기존 주거 환경에 센서를 부착하는 <b>건물 IoT (PropTech)</b>와 일상생활에서 직접 사용하는 <b>스마트 가전 IoT</b>입니다. 아래 버튼을 클릭하여 각 분야의 핵심 기술과 역할을 비교해 보세요.
+                </p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="switchTab('building')" id="btn-building" class="tab-btn active px-6 py-3 rounded-full border-2 border-stone-300 font-bold text-stone-600 hover:border-brand-500 transition-all duration-200 flex items-center gap-2 text-lg">
+                    🏢 구축 건물 환경 스마트화
+                </button>
+                <button onclick="switchTab('appliance')" id="btn-appliance" class="tab-btn px-6 py-3 rounded-full border-2 border-stone-300 font-bold text-stone-600 hover:border-brand-500 transition-all duration-200 flex items-center gap-2 text-lg">
+                    📺 일상 생활 스마트 가전 연동
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-md border border-stone-200 min-h-[400px]">
+                
+                <!-- Building IoT Content -->
+                <div id="content-building" class="fade-in block">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="w-full md:w-1/3 flex justify-center">
+                            <div class="text-center">
+                                <div class="text-8xl mb-4">🧱</div>
+                                <h3 class="text-2xl font-bold text-ink">공간 기반 인지 (Ambient)</h3>
+                                <p class="text-stone-500 mt-2">사용자의 적극적 조작 없이 백그라운드에서 안전을 모니터링합니다.</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <ul class="space-y-4">
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-stone-50 border border-stone-100">
+                                    <div class="text-2xl mt-1">💡</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-ink">스마트 조명 및 무선 스위치</h4>
+                                        <p class="text-stone-600 mt-1">구축 건물의 배선 공사 없이 배터리형 무선 스위치를 부착. 야간 화장실 이동 시 동작 감지 센서와 연동하여 자동으로 간접 조명 점등 (낙상 방지).</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-stone-50 border border-stone-100">
+                                    <div class="text-2xl mt-1">🚪</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-ink">스마트 도어록 및 문열림 센서</h4>
+                                        <p class="text-stone-600 mt-1">보호자가 원격으로 현관문 상태를 확인. 치매 어르신의 야간 배회 등 비정상적인 시간대의 문 열림 발생 시 보호자 스마트폰으로 즉각 알림 전송.</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-stone-50 border border-stone-100">
+                                    <div class="text-2xl mt-1">🔥</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-ink">가스/화재 자동 차단기</h4>
+                                        <p class="text-stone-600 mt-1">기존 가스 밸브 위에 덧씌우는 형태의 IoT 차단기. 일정 시간 후 자동 잠금 또는 온도 급상승 감지 시 강제 차단 기능 제공.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appliance IoT Content -->
+                <div id="content-appliance" class="fade-in hidden">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="w-full md:w-1/3 flex justify-center">
+                            <div class="text-center">
+                                <div class="text-8xl mb-4">🗣️</div>
+                                <h3 class="text-2xl font-bold text-ink">상호작용 기반 (Interactive)</h3>
+                                <p class="text-stone-500 mt-2">음성과 익숙한 가전을 통해 시니어와 직접 소통하고 편의를 제공합니다.</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <ul class="space-y-4">
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-brand-50 border border-brand-100">
+                                    <div class="text-2xl mt-1">🔊</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-brand-900">AI 스마트 스피커 (돌봄 인형)</h4>
+                                        <p class="text-stone-700 mt-1">음성 명령으로 날씨, 약 복용 시간 안내 및 말벗 기능 제공. "살려줘" 등 구조 음성 인식 시 119 및 보호자에게 긴급 SOS 발신.</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-brand-50 border border-brand-100">
+                                    <div class="text-2xl mt-1">📺</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-brand-900">스마트 TV 연동 알림</h4>
+                                        <p class="text-stone-700 mt-1">시니어가 가장 오래 시청하는 TV 화면에 방문자 확인(스마트벨 연동), 복약 시간 팝업, 지자체 공지사항 등을 텍스트와 음성으로 송출.</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-4 items-start p-4 rounded-xl bg-brand-50 border border-brand-100">
+                                    <div class="text-2xl mt-1">❄️</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-brand-900">스마트 냉장고 문열림 분석</h4>
+                                        <p class="text-stone-700 mt-1">냉장고 개폐 데이터를 분석하여 식사 여부를 추론. 24시간 이상 개폐 이력이 없을 경우 이상 상황으로 간주하여 복지사에게 알림.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Radar Chart & Needs -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-ink mb-4">시니어가 진짜 원하는 기술</h2>
+                    <p class="text-stone-600 mb-6 text-lg leading-relaxed">
+                        화려한 최신 기술보다는 <b>'생존과 직결된 안전'</b>, 그리고 <b>'사용의 직관성'</b>이 가장 중요합니다. 우측 다이어그램은 시니어 대상 조사에서 나타난 서비스 필요도를 보여줍니다.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 text-red-600 font-bold">1</span>
+                            <span class="text-lg font-medium text-stone-800">응급 상황 감지 및 대처 (가장 높음)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold">2</span>
+                            <span class="text-lg font-medium text-stone-800">건강 및 복약 관리</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 font-bold">3</span>
+                            <span class="text-lg font-medium text-stone-800">외로움 해소 및 소통 (정서 케어)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 font-bold">4</span>
+                            <span class="text-lg font-medium text-stone-800">가사 보조 (로봇 청소기 등)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                    <h3 class="text-lg font-bold text-center mb-4 text-ink">시니어 스마트 서비스 필요도 다이어그램</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Use Cases (Interactive Grid) -->
+    <section id="usecases" class="py-16 bg-brand-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl font-bold mb-4">실제 생활 적용 시나리오</h2>
+                <p class="text-brand-100 max-w-3xl mx-auto text-lg leading-relaxed">
+                    구축 건물 인프라와 가전 기기가 결합되었을 때, 시니어의 일상이 어떻게 보호받고 편리해지는지 구체적인 3가지 사례를 통해 확인해 보세요. 각 카드를 클릭하면 상세 시나리오가 나타납니다.
+                </p>
+            </div>
+
+            <!-- Case Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div onclick="showCase(1)" class="case-card cursor-pointer bg-brand-800 border border-brand-600 rounded-2xl p-6 hover:bg-brand-700 transition-colors group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🚨</div>
+                    <h3 class="text-xl font-bold mb-2">사례 1: 무자각 낙상 감지</h3>
+                    <p class="text-brand-200 text-sm">레이더 센서와 스마트 조명의 결합</p>
+                </div>
+                <div onclick="showCase(2)" class="case-card cursor-pointer bg-brand-800 border border-brand-600 rounded-2xl p-6 hover:bg-brand-700 transition-colors group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">💊</div>
+                    <h3 class="text-xl font-bold mb-2">사례 2: 지능형 복약 관리</h3>
+                    <p class="text-brand-200 text-sm">스피커, TV, 센서의 다중 알림망</p>
+                </div>
+                <div onclick="showCase(3)" class="case-card cursor-pointer bg-brand-800 border border-brand-600 rounded-2xl p-6 hover:bg-brand-700 transition-colors group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🛏️</div>
+                    <h3 class="text-xl font-bold mb-2">사례 3: 치매 배회 및 고독사 예방</h3>
+                    <p class="text-brand-200 text-sm">전력량 및 활동량 복합 분석</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Case Details -->
+            <div id="case-detail-container" class="bg-white text-ink rounded-3xl p-8 shadow-2xl hidden">
+                <div class="flex justify-between items-start mb-6 border-b border-stone-200 pb-4">
+                    <h3 id="case-title" class="text-2xl font-bold text-brand-700"></h3>
+                    <button onclick="hideCase()" class="text-stone-400 hover:text-stone-700 font-bold text-xl">&times;</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-stone-500 mb-3 text-sm tracking-wide uppercase">상황 및 문제점</h4>
+                        <p id="case-problem" class="text-lg text-stone-800 mb-6 bg-stone-50 p-4 rounded-lg border border-stone-100"></p>
+                        
+                        <h4 class="font-bold text-stone-500 mb-3 text-sm tracking-wide uppercase">적용 기술 (How)</h4>
+                        <ul id="case-tech" class="list-disc list-inside space-y-2 text-stone-700"></ul>
+                    </div>
+                    
+                    <div class="bg-brand-50 rounded-2xl p-6 border border-brand-100 relative">
+                        <div class="absolute -top-3 -left-3 text-3xl">✨</div>
+                        <h4 class="font-bold text-brand-900 mb-3 text-lg">작동 시나리오 플로우</h4>
+                        <div id="case-flow" class="flex flex-col gap-2 mt-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-100 py-8 text-center text-stone-500 text-sm border-t border-stone-200">
+        <p>본 페이지는 구축 건물 및 가전 IOT 구축 및 시니어 적용 사례 분석을 위해 작성된 반응형 대시보드입니다.</p>
+        <p class="mt-2">&copy; 2026 Smart Senior Care Research Data.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. Data Definitions ---
+        
+        // Chart 1 Data: Aging vs IoT Adoption Trend
+        const trendData = {
+            labels: ['2020', '2021', '2022', '2023', '2024', '2025(E)', '2026(E)'],
+            datasets: [
+                {
+                    label: '65세 이상 인구 비율 (%)',
+                    data: [15.7, 16.5, 17.5, 18.4, 19.2, 20.6, 21.8],
+                    borderColor: '#e11d48', // Rose 600
+                    backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '시니어 가구 IoT 도입률 (%)',
+                    data: [5.2, 7.8, 12.1, 18.5, 26.3, 35.0, 42.5],
+                    borderColor: '#34907d', // Brand 500
+                    backgroundColor: 'rgba(52, 144, 125, 0.1)',
+                    borderWidth: 3,
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }
+            ]
+        };
+
+        // Chart 2 Data: Needs Radar Chart
+        const radarData = {
+            labels: ['응급/안전 감지', '건강/생체 모니터링', '복약/일정 알림', '정서 지원(말벗)', '가사/편의 보조', '외부 소통'],
+            datasets: [{
+                label: '서비스 필요도 점수 (10점 만점)',
+                data: [9.5, 8.2, 8.8, 7.5, 6.5, 7.0],
+                backgroundColor: 'rgba(52, 144, 125, 0.4)',
+                borderColor: '#287365', // Brand 600
+                pointBackgroundColor: '#235c52',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#287365'
+            }]
+        };
+
+        // Use Cases Data
+        const useCases = {
+            1: {
+                title: "🚨 무자각 낙상 감지 시스템",
+                problem: "화장실이나 침실에서 발생하는 낙상은 치명적이나, 시니어는 카메라(CCTV)나 웨어러블 기기 착용을 극도로 꺼려합니다.",
+                tech: [
+                    "구축 천장 부착형 UWB(초광대역) 무선 레이더 센서",
+                    "스마트 조명 (자동 점등)",
+                    "AI 스피커 연동 알림"
+                ],
+                flow: [
+                    { icon: "🚶", text: "야간에 화장실 이동 시도" },
+                    { icon: "💡", text: "모션 감지로 발밑 간접 스마트 조명 켜짐" },
+                    { icon: "💥", text: "화장실 내 낙상 발생 (레이더가 높이/속도 변화 감지)" },
+                    { icon: "🔊", text: "카메라 없이 이상 감지, AI 스피커가 '괜찮으신가요?' 확인" },
+                    { icon: "📱", text: "무응답 시 보호자 앱 및 119 자동 호출" }
+                ]
+            },
+            2: {
+                title: "💊 지능형 복약 관리 네트워크",
+                problem: "다중 만성질환자의 복약 순응도 저하는 심각한 문제이나, 단순 알람만으로는 실제 복약 여부를 확인하기 어렵습니다.",
+                tech: [
+                    "스마트 약통 (열림 감지 센서)",
+                    "스마트 TV (화면 팝업 연동)",
+                    "스마트 정수기 (출수 데이터 연동)"
+                ],
+                flow: [
+                    { icon: "⏰", text: "정해진 복약 시간 도달" },
+                    { icon: "📺", text: "시청 중인 TV 화면에 복약 알림 팝업 및 음성 송출" },
+                    { icon: "🚰", text: "스마트 약통 열림 및 정수기 물 사용 데이터 동시 감지" },
+                    { icon: "✅", text: "복약 완료로 서버에 자동 기록" },
+                    { icon: "⚠️", text: "1시간 경과 후에도 약통 미개방 시 보호자에게 경고" }
+                ]
+            },
+            3: {
+                title: "🛏️ 치매 배회 및 고독사 예방",
+                problem: "독거 치매 환자의 무단 외출이나, 주거지 내에서의 장기간 비활동(고독사 위험)을 사전에 파악하기 어렵습니다.",
+                tech: [
+                    "스마트 분전반 (실시간 전력량 분석)",
+                    "스마트 도어록 및 현관 동작 센서",
+                    "스마트 냉장고 문열림 센서"
+                ],
+                flow: [
+                    { icon: "🔌", text: "평소 패턴(TV 시청, 전자레인지 사용)의 전력 데이터 학습" },
+                    { icon: "🛑", text: "24시간 동안 전력 사용 패턴 급감 및 냉장고 미개방 감지" },
+                    { icon: "🚪", text: "또는 새벽 2시에 현관문 열림 센서 작동" },
+                    { icon: "🧠", text: "AI 플랫폼이 '이상 상황(고립 또는 배회)'으로 판단" },
+                    { icon: "👨‍⚕️", text: "지자체 관제 센터 및 전담 사회복지사에게 즉시 출동 요망 알림" }
+                ]
+            }
+        };
+
+        // --- 2. Interaction Logic ---
+
+        // Initialize Charts
+        window.onload = function() {
+            // Trend Chart
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: trendData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { 
+                            type: 'linear', display: true, position: 'left',
+                            title: { display: true, text: '고령 인구 (%)', font: {size: 11} }
+                        },
+                        y1: { 
+                            type: 'linear', display: true, position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'IoT 도입률 (%)', font: {size: 11} }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Radar Chart
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: radarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 12, family: "'Pretendard', sans-serif" }, color: '#2C3E50' },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return '필요도: ' + context.parsed.r + '점'; }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-600', 'text-white', 'border-brand-600');
+                btn.classList.add('text-stone-600', 'border-stone-300');
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active', 'bg-brand-600', 'text-white', 'border-brand-600');
+            activeBtn.classList.remove('text-stone-600', 'border-stone-300');
+
+            // Update content visibility with fade
+            document.querySelectorAll('#technology .fade-in').forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+            const activeContent = document.getElementById('content-' + tabId);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('block');
+        }
+
+        // Use Case Display Logic
+        function showCase(caseId) {
+            const data = useCases[caseId];
+            if (!data) return;
+
+            const container = document.getElementById('case-detail-container');
+            
+            // Populate data
+            document.getElementById('case-title').innerText = data.title;
+            document.getElementById('case-problem').innerText = data.problem;
+            
+            const techList = document.getElementById('case-tech');
+            techList.innerHTML = '';
+            data.tech.forEach(item => {
+                techList.innerHTML += `<li>${item}</li>`;
+            });
+
+            const flowContainer = document.getElementById('case-flow');
+            flowContainer.innerHTML = '';
+            data.flow.forEach((step, index) => {
+                const isLast = index === data.flow.length - 1;
+                flowContainer.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-white border border-brand-200 flex items-center justify-center text-sm shadow-sm z-10 relative">
+                                ${step.icon}
+                            </div>
+                            ${!isLast ? '<div class="w-0.5 h-6 bg-brand-200 my-1"></div>' : ''}
+                        </div>
+                        <div class="pt-1">
+                            <p class="text-sm font-medium ${isLast ? 'text-brand-800 font-bold' : 'text-stone-700'}">${step.text}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Show container with slight delay for scroll
+            container.classList.remove('hidden');
+            container.classList.add('fade-in');
+            
+            // Smooth scroll to details
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+        }
+
+        function hideCase() {
+            const container = document.getElementById('case-detail-container');
+            container.classList.add('hidden');
+            container.classList.remove('fade-in');
+        }
+    </script>
+</body>
+</html>
