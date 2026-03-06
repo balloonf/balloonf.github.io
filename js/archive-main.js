@@ -144,7 +144,13 @@ function applyFiltersAndSearchForEntries(entries) {
     let filtered = entries;
 
     if (currentFilter !== 'all') {
-        filtered = filtered.filter(e => e.type === currentFilter || e.type === 'folder');
+        filtered = filtered.filter(e => {
+            const itemCategory = e.category || e.parentDir;
+            if (e.type === 'folder') {
+                return itemCategory === currentFilter;
+            }
+            return e.type === currentFilter || itemCategory === currentFilter;
+        });
     }
 
     if (currentSearchQuery) {
@@ -232,32 +238,8 @@ function animateNumber(element, start, end, duration) {
  * 필터링 및 검색 적용
  */
 function applyFiltersAndSearch() {
-    // 하위폴더 내에서는 캐시된 데이터 사용
-    if (currentFolderPath) {
-        const entries = folderCache.get(currentFolderPath) || [];
-        applyFiltersAndSearchForEntries(entries);
-        return;
-    }
-
-    let filteredFiles = filesData;
-
-    // 1. 카테고리 필터링
-    if (currentFilter !== 'all') {
-        filteredFiles = filteredFiles.filter(file => file.type === currentFilter || file.type === 'folder');
-    }
-
-    // 2. 검색어 필터링
-    if (currentSearchQuery) {
-        const query = currentSearchQuery.toLowerCase();
-        filteredFiles = filteredFiles.filter(file => {
-            const nameMatch = file.name.toLowerCase().includes(query);
-            const descMatch = file.description && file.description.toLowerCase().includes(query);
-            return nameMatch || descMatch;
-        });
-    }
-
-    // 3. 결과 렌더링
-    renderFiles(filteredFiles);
+    const entries = currentFolderPath ? (folderCache.get(currentFolderPath) || []) : filesData;
+    applyFiltersAndSearchForEntries(entries);
 }
 
 /**

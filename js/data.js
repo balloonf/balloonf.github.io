@@ -135,6 +135,7 @@ async function loadFilesFromGitHub() {
                         name: file.name,
                         type: 'folder',
                         path: `${dir}/${file.name}`,
+                        category: dir,
                         parentDir: dir,
                         description: '폴더'
                     });
@@ -149,6 +150,7 @@ async function loadFilesFromGitHub() {
                 const entry = {
                     name: formatFileName(file.name),
                     type: fileType,
+                    category: dir,
                     path: `../${dir}/${file.name}`,
                     description: fileTypeLabels[fileType] || ''
                 };
@@ -202,6 +204,7 @@ async function loadSubfolder(dirPath) {
 
         if (!Array.isArray(items)) return [];
 
+        const category = dirPath.split('/')[0];
         const entries = [];
         for (const item of items) {
             if (item.name === '.gitkeep') continue;
@@ -213,6 +216,7 @@ async function loadSubfolder(dirPath) {
                         name: item.name,
                         type: 'folder',
                         path: `${dirPath}/${item.name}`,
+                        category: category,
                         parentDir: dirPath,
                         description: '폴더'
                     });
@@ -228,6 +232,7 @@ async function loadSubfolder(dirPath) {
             const entry = {
                 name: formatFileName(item.name),
                 type: fileType,
+                category: category,
                 path: `../${dirPath}/${item.name}`,
                 description: fileTypeLabels[fileType] || ''
             };
