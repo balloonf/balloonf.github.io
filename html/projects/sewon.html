@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세원 자동 견적 시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="app" class="min-h-screen p-4 md:p-8">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- 왼쪽: 입력 영역 -->
+            <div class="lg:col-span-2 space-y-6">
+                <header class="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-blue-600"></i>
+                            성원애드피아 지능형 견적 엔진
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">실시간 옵션별 단가 분석 및 물류비 산출</p>
+                    </div>
+                </header>
+
+                <!-- 1. 상품 선택 -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-bold text-lg mb-6 border-b pb-4">
+                        <i class="fa-solid fa-box text-blue-500"></i>
+                        <span>상품 및 사양 선택</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">품목 카테고리</label>
+                            <div class="flex gap-2">
+                                <button onclick="updateCategory('BUSINESS_CARD')" id="btn-card" class="cat-btn flex-1 py-2 px-3 rounded-xl text-sm font-medium border bg-blue-600 text-white border-blue-600">명함</button>
+                                <button onclick="updateCategory('FLYER')" id="btn-flyer" class="cat-btn flex-1 py-2 px-3 rounded-xl text-sm font-medium border bg-white text-slate-600 border-slate-200">전단</button>
+                                <button onclick="updateCategory('STICKER')" id="btn-sticker" class="cat-btn flex-1 py-2 px-3 rounded-xl text-sm font-medium border bg-white text-slate-600 border-slate-200">스티커</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">상세 용지/재질</label>
+                            <select id="product-type" onchange="calculate()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                                <!-- JS에서 채워짐 -->
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">주문 수량 (매)</label>
+                            <input type="number" id="quantity" oninput="calculate()" value="200" step="100" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold">
+                        </div>
+
+                        <div class="flex items-end">
+                            <div class="bg-amber-50 border border-amber-100 p-3 rounded-xl flex gap-3 items-start w-full">
+                                <i class="fa-solid fa-circle-info text-amber-500 mt-0.5"></i>
+                                <p class="text-[11px] text-amber-800 leading-relaxed">
+                                    합판 인쇄는 공정상 5~10% 내외의 수량 부족이 발생할 수 있습니다. 정매수가 필요한 경우 별도 문의 바랍니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. 후가공 -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-bold text-lg mb-6 border-b pb-4">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-500"></i>
+                        <span>후가공 추가 옵션</span>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="post-options">
+                        <!-- JS에서 채워짐 -->
+                    </div>
+                </section>
+
+                <!-- 3. 배송/물류 -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-bold text-lg mb-6 border-b pb-4">
+                        <i class="fa-solid fa-truck-fast text-emerald-500"></i>
+                        <span>물류 엔진 설정</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">배송 수단</label>
+                            <select id="shipping-method" onchange="calculate()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                                <option value="parcel">택배 (3,000원)</option>
+                                <option value="freight">경동화물 (4,000원~)</option>
+                                <option value="quick">오토바이 퀵 (12,000원~)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">수령 지역</label>
+                            <select id="region" onchange="calculate()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                                <option value="seoul">서울/수도권</option>
+                                <option value="jeolla">전라도 (지역할증 10%)</option>
+                                <option value="gyeongsang">경상도 (지역할증 10%)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center pt-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="monthly-user" onchange="calculate()" class="w-4 h-4 rounded">
+                                <span class="text-sm font-medium">월배송 회원 (무료배송)</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 오른쪽: 결과창 -->
+            <div class="space-y-6">
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl sticky top-8 space-y-8">
+                    <div class="space-y-2">
+                        <h2 class="text-slate-400 text-sm font-medium uppercase">최종 예상 견적액</h2>
+                        <div class="text-4xl font-extrabold flex items-baseline gap-1 text-blue-400">
+                            <span id="total-price">0</span>
+                            <span class="text-xl font-normal opacity-70 ml-1 text-white">원</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 border-t border-slate-800 pt-6">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-400">기본 인쇄비</span>
+                            <span id="base-val">0원</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-400">후가공비 합계</span>
+                            <span id="post-val" class="text-purple-400">+0원</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-400">물류비/지역할증</span>
+                            <span id="ship-val" class="text-emerald-400">+0원</span>
+                        </div>
+                        <div class="flex justify-between text-sm pt-4 border-t border-slate-800 font-bold">
+                            <span>공급가액</span>
+                            <span id="supply-val">0원</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-slate-400">
+                            <span>부가세 (10%)</span>
+                            <span id="vat-val">0원</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl space-y-3 text-[11px] text-slate-400 border border-slate-700">
+                        <p><i class="fa-solid fa-circle-check text-blue-500 mr-2"></i>모든 파일은 CMYK 모드로 접수</p>
+                        <p><i class="fa-solid fa-circle-check text-blue-500 mr-2"></i>폰트 아웃라인(곡선화) 필수</p>
+                        <p><i class="fa-solid fa-clock text-amber-500 mr-2"></i>평균 제작 기간: 1~3영업일</p>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-credit-card"></i>
+                        견적서 출력 / 주문하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DATA = {
+            BUSINESS_CARD: {
+                types: [
+                    { id: 'premium', name: '고급지 명함', min: 200, price: 5500, unit: 200 },
+                    { id: 'pet', name: 'PET 카드명함', min: 200, price: 11000, unit: 200 },
+                    { id: 'digital', name: '디지털 에폭시', min: 100, price: 5200, unit: 100 }
+                ]
+            },
+            FLYER: {
+                types: [
+                    { id: 'gang_90', name: '합판전단 (90g)', min: 2000, price: 35000, qtySteps: { 2000: 35000, 4000: 44000, 8000: 116000 } },
+                    { id: 'pod', name: '소량 전단 (POD)', min: 10, price: 5000, unit: 10 }
+                ]
+            },
+            STICKER: {
+                types: [
+                    { id: 'square', name: '사각형 (재단형)', min: 1000, price: 6000, unit: 1000 },
+                    { id: 'domusong', name: '도무송 (자유형)', min: 1000, price: 9600, unit: 1000 }
+                ]
+            }
+        };
+
+        const POST = [
+            { id: 'coating', name: '무광코팅', fee: 5000 },
+            { id: 'fold', name: '2단 접지', fee: 28000 },
+            { id: 'scoring', name: '오시/미싱', fee: 20000 },
+            { id: 'round', name: '귀도리(라운딩)', fee: 10000 }
+        ];
+
+        let currentCat = 'BUSINESS_CARD';
+
+        function updateCategory(cat) {
+            currentCat = cat;
+            // 버튼 스타일 업데이트
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            document.getElementById(`btn-${cat.toLowerCase().replace('_', '-')}`).className = 'cat-btn flex-1 py-2 px-3 rounded-xl text-sm font-medium border bg-blue-600 text-white border-blue-600 shadow-md';
+            
+            // 상세 유형 셀렉트박스 채우기
+            const select = document.getElementById('product-type');
+            select.innerHTML = '';
+            DATA[cat].types.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.textContent = t.name;
+                select.appendChild(opt);
+            });
+
+            // 수량 초기값
+            document.getElementById('quantity').value = DATA[cat].types[0].min;
+            calculate();
+        }
+
+        function initPostOptions() {
+            const container = document.getElementById('post-options');
+            POST.forEach(p => {
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-3 p-3 rounded-xl border bg-white cursor-pointer hover:border-blue-200 transition-all";
+                label.innerHTML = `
+                    <input type="checkbox" value="${p.id}" onchange="calculate()" class="post-check w-4 h-4 rounded">
+                    <div>
+                        <div class="text-sm font-semibold">${p.name}</div>
+                        <div class="text-[10px] text-slate-400">+${p.fee.toLocaleString()}원</div>
+                    </div>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function calculate() {
+            const typeId = document.getElementById('product-type').value;
+            const qty = parseInt(document.getElementById('quantity').value) || 0;
+            const shipMethod = document.getElementById('shipping-method').value;
+            const region = document.getElementById('region').value;
+            const isMonthly = document.getElementById('monthly-user').checked;
+
+            const product = DATA[currentCat].types.find(t => t.id === typeId);
+            
+            // 1. 기본 인쇄비
+            let base = 0;
+            if (product.qtySteps) {
+                const steps = Object.keys(product.qtySteps).map(Number).sort((a,b) => b-a);
+                const matched = steps.find(s => qty >= s) || steps[steps.length-1];
+                base = product.qtySteps[matched] * (qty / matched);
+            } else {
+                base = (qty / product.unit) * product.price;
+            }
+
+            // 2. 후가공비
+            let postTotal = 0;
+            document.querySelectorAll('.post-check:checked').forEach(chk => {
+                const p = POST.find(item => item.id === chk.value);
+                postTotal += p.fee;
+            });
+
+            // 3. 물류비
+            let shipBase = { parcel: 3000, freight: 4000, quick: 12000 }[shipMethod];
+            if (region !== 'seoul' && shipMethod === 'freight') shipBase *= 1.1;
+            if (isMonthly) shipBase = 0;
+
+            const supply = base + postTotal;
+            const vat = Math.floor(supply * 0.1);
+            const total = supply + vat + shipBase;
+
+            // UI 업데이트
+            document.getElementById('total-price').textContent = Math.floor(total).toLocaleString();
+            document.getElementById('base-val').textContent = Math.floor(base).toLocaleString() + '원';
+            document.getElementById('post-val').textContent = '+' + postTotal.toLocaleString() + '원';
+            document.getElementById('ship-val').textContent = '+' + Math.floor(shipBase).toLocaleString() + '원';
+            document.getElementById('supply-val').textContent = Math.floor(supply).toLocaleString() + '원';
+            document.getElementById('vat-val').textContent = vat.toLocaleString() + '원';
+        }
+
+        window.onload = () => {
+            updateCategory('BUSINESS_CARD');
+            initPostOptions();
+        };
+    </script>
+</body>
+</html>
