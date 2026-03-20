@@ -32,7 +32,7 @@ const Router = {
      * 현재 해시를 파싱해서 매칭 라우트의 핸들러 실행
      */
     resolve() {
-        const raw   = window.location.hash.slice(1) || '/';
+        const raw   = decodeURIComponent(window.location.hash.slice(1) || '/');
         const [pathPart, queryPart] = raw.split('?');
         const query  = new URLSearchParams(queryPart || '');
         const segments = pathPart.split('/');
