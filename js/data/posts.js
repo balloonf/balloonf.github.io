@@ -93,7 +93,7 @@ async function loadPostsFromGitHub() {
         // 2. 각 파일의 raw 내용을 병렬로 가져오기 (raw URL은 rate limit 미적용)
         const postPromises = mdFiles.map(async (file) => {
             try {
-                const rawRes = await fetch(`${RAW_BASE_URL}/${POSTS_DIR}/${file.name}`);
+                const rawRes = await fetch(`${RAW_BASE_URL}/${POSTS_DIR}/${encodeURIComponent(file.name)}`);
                 if (!rawRes.ok) return null;
                 const rawText = await rawRes.text();
 
