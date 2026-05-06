@@ -2,57 +2,57 @@
    themes.css — 디자인 토큰 (CSS 변수)
    ============================================================ */
 :root {
-    /* === 브랜드 그라디언트 === */
-    --gradient-brand:   linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-hero:    linear-gradient(135deg, #f093fb 0%, #f5576c 40%, #667eea 100%);
+    /* === 브랜드 그라디언트 (Linear 스타일의 은은한 그라디언트) === */
+    --gradient-brand:   linear-gradient(135deg, #7A70FF 0%, #5E52FF 100%);
+    --gradient-hero:    linear-gradient(to bottom right, #fbfbfb, #f0f0f0);
     --gradient-warm:    linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
     --gradient-cool:    linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-purple:  linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    --gradient-purple:  linear-gradient(135deg, #8B85FF 0%, #5E52FF 100%);
     --gradient-sunset:  linear-gradient(135deg, #fd7743 0%, #ff6b9d 100%);
     --gradient-ocean:   linear-gradient(135deg, #2980b9 0%, #6dd5fa 50%, #ffffff 100%);
 
-    /* === 핵심 색상 === */
-    --color-primary:        #7c3aed;   /* violet-600 */
-    --color-primary-dark:   #5b21b6;   /* violet-800 */
-    --color-primary-light:  #a78bfa;   /* violet-400 */
-    --color-secondary:      #ec4899;   /* pink-500 */
-    --color-accent:         #06b6d4;   /* cyan-500 */
-    --color-success:        #10b981;   /* emerald-500 */
-    --color-warning:        #f59e0b;   /* amber-500 */
-    --color-danger:         #ef4444;   /* red-500 */
+    /* === 핵심 색상 (Linear Light Mode) === */
+    --color-primary:        #5E52FF;
+    --color-primary-dark:   #4A3AFF;
+    --color-primary-light:  #8B85FF;
+    --color-secondary:      #FF4582;
+    --color-accent:         #00C2D1;
+    --color-success:        #219653;
+    --color-warning:        #F2C94C;
+    --color-danger:         #EB5757;
 
     /* === 태그 색상 === */
-    --tag-javascript:   #f59e0b;
-    --tag-typescript:   #3b82f6;
-    --tag-css:          #8b5cf6;
-    --tag-html:         #ef4444;
-    --tag-web:          #10b981;
-    --tag-tips:         #ec4899;
-    --tag-review:       #f97316;
-    --tag-etc:          #6b7280;
+    --tag-javascript:   #F2C94C;
+    --tag-typescript:   #2F80ED;
+    --tag-css:          #9B51E0;
+    --tag-html:         #EB5757;
+    --tag-web:          #219653;
+    --tag-tips:         #FF4582;
+    --tag-review:       #F2994A;
+    --tag-etc:          #828282;
 
-    /* === 배경 === */
-    --color-bg:             #fafafa;
-    --color-bg-secondary:   #f3f4f6;
-    --color-bg-card:        #ffffff;
-    --color-bg-hover:       #f5f3ff;
-    --color-bg-code:        #1e1e2e;
+    /* === 배경 (Linear Light Mode) === */
+    --color-bg:             #FFFFFF;
+    --color-bg-secondary:   #F7F8F8;
+    --color-bg-card:        #FFFFFF;
+    --color-bg-hover:       #F2F3F4;
+    --color-bg-code:        #F4F5F6;
 
-    /* === 텍스트 === */
-    --color-text-primary:   #111827;
-    --color-text-secondary: #6b7280;
-    --color-text-muted:     #9ca3af;
-    --color-text-inverse:   #ffffff;
+    /* === 텍스트 (Linear Light Mode) === */
+    --color-text-primary:   #1A1A1A;
+    --color-text-secondary: #8A8F98;
+    --color-text-muted:     #B4B9C1;
+    --color-text-inverse:   #FFFFFF;
 
-    /* === 보더 & 그림자 === */
-    --color-border:         #e5e7eb;
-    --color-border-strong:  #d1d5db;
-    --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
-    --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md:  0 4px 12px rgba(0,0,0,0.08);
-    --shadow-lg:  0 8px 24px rgba(0,0,0,0.12);
-    --shadow-xl:  0 16px 40px rgba(0,0,0,0.16);
-    --shadow-color: 0 8px 24px rgba(124,58,237,0.25);
+    /* === 보더 & 그림자 (Linear Light Mode) === */
+    --color-border:         #EBEBEB;
+    --color-border-strong:  #D4D4D4;
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --shadow-lg:  0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+    --shadow-xl:  0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+    --shadow-color: 0 4px 14px 0 rgba(94,82,255,0.25);
 
     /* === 간격 === */
     --space-1:  0.25rem;
@@ -68,64 +68,67 @@
     --space-20: 5rem;
     --space-24: 6rem;
 
-    /* === 둥글기 === */
-    --radius-sm:   6px;
-    --radius-md:   10px;
-    --radius-lg:   16px;
-    --radius-xl:   24px;
+    /* === 둥글기 (Linear는 조금 덜 둥근 편) === */
+    --radius-sm:   4px;
+    --radius-md:   6px;
+    --radius-lg:   8px;
+    --radius-xl:   12px;
     --radius-full: 9999px;
 
     /* === 폰트 === */
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI',
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
                  'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    --font-mono: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
 
     /* === 전환 === */
-    --ease-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-slow:   500ms cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-bounce: 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-fast:   150ms cubic-bezier(0.2, 0, 0, 1);
+    --ease-normal: 250ms cubic-bezier(0.2, 0, 0, 1);
+    --ease-slow:   400ms cubic-bezier(0.2, 0, 0, 1);
+    --ease-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
     /* === 글래스모피즘 === */
-    --glass-bg: rgba(255,255,255,0.82);
-    --glass-border: rgba(255,255,255,0.3);
-    --glass-bg-mobile: rgba(255,255,255,0.95);
+    --glass-bg: rgba(255,255,255,0.7);
+    --glass-border: rgba(235,235,235,0.4);
+    --glass-bg-mobile: rgba(255,255,255,0.9);
 
     /* === 레이아웃 === */
-    --container-max: 1100px;
-    --header-height: 64px;
+    --container-max: 1040px;
+    --header-height: 56px;
 }
 
 /* ============================================================
-   다크 모드
+   다크 모드 (Linear Dark Mode)
    ============================================================ */
 [data-theme="dark"] {
-    --color-bg:            #0f0f1a;
-    --color-bg-secondary:  #1a1a2e;
-    --color-bg-card:       #16162a;
-    --color-bg-hover:      #1e1e3a;
-    --color-bg-code:       #0d0d1a;
+    --gradient-brand:   linear-gradient(135deg, #7A70FF 0%, #5E52FF 100%);
+    --gradient-hero:    linear-gradient(to bottom right, #1a1b1f, #0c0d0e);
 
-    --color-text-primary:   #e2e8f0;
-    --color-text-secondary: #94a3b8;
-    --color-text-muted:     #64748b;
-    --color-text-inverse:   #0f172a;
+    --color-bg:            #0C0D0E;
+    --color-bg-secondary:  #141517;
+    --color-bg-card:       #111214;
+    --color-bg-hover:      #1D1E22;
+    --color-bg-code:       #18191B;
 
-    --color-primary:       #a78bfa;
-    --color-primary-dark:  #7c3aed;
-    --color-primary-light: #c4b5fd;
+    --color-text-primary:   #F2F2F2;
+    --color-text-secondary: #8A8F98;
+    --color-text-muted:     #686C73;
+    --color-text-inverse:   #0C0D0E;
 
-    --color-border:        #2d2d4a;
-    --color-border-strong: #3d3d5c;
+    --color-primary:       #7A70FF;
+    --color-primary-dark:  #5E52FF;
+    --color-primary-light: #9B94FF;
 
-    --shadow-xs:  0 1px 2px rgba(0,0,0,0.2);
-    --shadow-sm:  0 1px 3px rgba(0,0,0,0.3);
-    --shadow-md:  0 4px 12px rgba(0,0,0,0.4);
-    --shadow-lg:  0 8px 24px rgba(0,0,0,0.5);
-    --shadow-xl:  0 16px 40px rgba(0,0,0,0.6);
-    --shadow-color: 0 8px 24px rgba(167,139,250,0.3);
+    --color-border:        #2B2E33;
+    --color-border-strong: #3D4148;
 
-    --glass-bg: rgba(15,15,26,0.85);
-    --glass-border: rgba(255,255,255,0.06);
-    --glass-bg-mobile: rgba(15,15,26,0.95);
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.4);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.5);
+    --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.5);
+    --shadow-lg:  0 10px 15px -3px rgba(0,0,0,0.6);
+    --shadow-xl:  0 20px 25px -5px rgba(0,0,0,0.7);
+    --shadow-color: 0 4px 14px 0 rgba(122,112,255,0.25);
+
+    --glass-bg: rgba(12,13,14,0.7);
+    --glass-border: rgba(43,46,51,0.4);
+    --glass-bg-mobile: rgba(12,13,14,0.9);
 }

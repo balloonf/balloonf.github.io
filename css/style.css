@@ -249,49 +249,52 @@ button { font-family: inherit; }
 .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-full);
-    font-size: 0.95rem;
-    font-weight: 600;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
-    border: none;
-    transition: all var(--ease-normal);
+    border: 1px solid transparent;
+    transition: all var(--ease-fast);
     white-space: nowrap;
+    box-shadow: var(--shadow-xs);
 }
 
 .btn--primary {
-    background: var(--gradient-brand);
-    color: var(--color-text-inverse);
-    box-shadow: var(--shadow-color);
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary-dark);
 }
 .btn--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(124,58,237,0.35);
+    background: var(--color-primary-dark);
+    box-shadow: 0 4px 12px rgba(94, 82, 255, 0.2);
 }
-.btn--primary:active { transform: translateY(0); }
+.btn--primary:active { transform: scale(0.98); }
 
 .btn--secondary {
     background: var(--color-bg-card);
-    color: var(--color-primary);
-    border: 2px solid var(--color-border);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
 }
 .btn--secondary:hover {
-    border-color: var(--color-primary-light);
+    border-color: var(--color-border-strong);
     background: var(--color-bg-hover);
-    transform: translateY(-2px);
 }
+.btn--secondary:active { transform: scale(0.98); }
 
 .btn--ghost {
-    background: rgba(255,255,255,0.18);
-    color: #ffffff;
-    border: 1.5px solid var(--glass-border);
-    backdrop-filter: blur(8px);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+    box-shadow: none;
 }
 .btn--ghost:hover {
-    background: rgba(255,255,255,0.28);
-    transform: translateY(-2px);
+    color: var(--color-text-primary);
+    background: var(--color-bg-hover);
 }
+.btn--ghost:active { transform: scale(0.98); }
 
 /* ============================================================
    공통 섹션 타이틀
@@ -624,32 +627,16 @@ button { font-family: inherit; }
 .post-card {
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    transition: transform var(--ease-normal), box-shadow var(--ease-normal),
-                border-color var(--ease-normal);
+    border-radius: var(--radius-md);
+    transition: border-color var(--ease-fast), box-shadow var(--ease-fast), background var(--ease-fast);
     overflow: hidden;
     position: relative;
+    box-shadow: var(--shadow-xs);
 }
-.post-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: var(--gradient-brand);
-    opacity: 0;
-    transition: opacity var(--ease-fast);
-    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-}
-.post-card:hover::before { opacity: 1; }
 .post-card:hover {
-    transform: translateY(-4px) rotate(0.3deg);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-light);
-}
-[data-theme="dark"] .post-card:hover {
-    box-shadow: 0 8px 24px rgba(167,139,250,0.15);
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-hover);
+    box-shadow: var(--shadow-sm);
 }
 
 .post-card__link {
@@ -783,22 +770,22 @@ button { font-family: inherit; }
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-bottom: var(--space-8);
-    padding: var(--space-4);
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
 }
 
 .tag-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    border: 1.5px solid var(--color-border);
-    background: transparent;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
     color: var(--color-text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     font-weight: 500;
     cursor: pointer;
     transition: all var(--ease-fast);
@@ -807,18 +794,17 @@ button { font-family: inherit; }
 .tag-btn:hover {
     border-color: var(--color-border-strong);
     color: var(--color-text-primary);
-    background: var(--color-bg-secondary);
 }
 .tag-btn.active {
-    font-weight: 700;
-    border-color: currentColor;
-    box-shadow: var(--shadow-xs);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-strong);
 }
-/* "전체" 버튼의 active 상태는 primary 색으로 */
+/* "전체" 버튼의 active 상태 */
 .tag-btn[data-tag="all"].active {
-    background: var(--color-bg-hover);
-    color: var(--color-primary);
-    border-color: var(--color-primary-light);
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary-dark);
 }
 
 .tag-count {
@@ -1090,18 +1076,17 @@ button { font-family: inherit; }
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    padding: var(--space-5) var(--space-5);
+    padding: var(--space-4) var(--space-5);
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    transition: all var(--ease-normal);
+    border-radius: var(--radius-md);
+    transition: all var(--ease-fast);
     max-width: 300px;
     width: 100%;
 }
 .post-nav__link:hover {
-    border-color: var(--color-primary-light);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-hover);
 }
 .post-nav__link--right {
     text-align: right;
